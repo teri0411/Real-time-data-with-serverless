@@ -1,0 +1,19 @@
+{
+  "name": "getlocation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@opensearch-project/opensearch": "^1.1.0",
+    "aws-sdk": "^2.1140.0",
+    "elasticsearch": "^16.7.3",
+    "elasticsearch-nodejs-watcher": "^1.0.5",
+    "index": "^0.4.0",
+    "ws": "^8.6.0"
+  }
+}

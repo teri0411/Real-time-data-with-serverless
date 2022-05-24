@@ -1,0 +1,16 @@
+service: test
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x # FILL_ME_IN
+  region: ap-northeast-2 
+
+  	
+functions:
+  getLocation:
+    handler: handler.handler
+
+plugins:
+  - serverless-lift
+
