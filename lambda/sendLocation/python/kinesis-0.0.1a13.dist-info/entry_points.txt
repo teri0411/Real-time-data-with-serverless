@@ -1,3 +1,0 @@
-[console_scripts]
-kinesis = kinesis.cli:main
-
