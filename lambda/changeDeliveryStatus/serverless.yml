@@ -1,0 +1,35 @@
+service: ChangeDeliveryStatus
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: ap-northeast-2
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "sns:Publish"
+          Resource: "arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatus"
+
+functions:
+  startDelivery:
+    handler: handler.start
+    events:
+      - httpApi:
+          path: /start
+          method: get
+  endDelivery:
+    handler: handler.end
+    events:
+      - httpApi:
+          path: /end
+          method: get
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
