@@ -8,8 +8,8 @@ resource "aws_vpc" "twohundreadok-vpc" {
 
 # Subnet
 resource "aws_subnet" "twohundreadok-public-subnet" {
-  vpc_id     = aws_vpc.twohundreadok-vpc.id
-  cidr_block = "10.0.0.0/28"
+  vpc_id            = aws_vpc.twohundreadok-vpc.id
+  cidr_block        = "10.0.0.0/28"
   availability_zone = "ap-northeast-2a"
 
   tags = {
@@ -18,8 +18,8 @@ resource "aws_subnet" "twohundreadok-public-subnet" {
 }
 
 resource "aws_subnet" "twohundreadok-private-subnet" {
-  vpc_id     = aws_vpc.twohundreadok-vpc.id
-  cidr_block = "10.0.0.16/28"
+  vpc_id            = aws_vpc.twohundreadok-vpc.id
+  cidr_block        = "10.0.0.16/28"
   availability_zone = "ap-northeast-2a"
 
   tags = {
@@ -28,8 +28,8 @@ resource "aws_subnet" "twohundreadok-private-subnet" {
 }
 
 resource "aws_subnet" "twohundreadok-public-subnet-2" {
-  vpc_id     = aws_vpc.twohundreadok-vpc.id
-  cidr_block = "10.0.0.128/28"
+  vpc_id            = aws_vpc.twohundreadok-vpc.id
+  cidr_block        = "10.0.0.128/28"
   availability_zone = "ap-northeast-2c"
 
   tags = {
@@ -38,8 +38,8 @@ resource "aws_subnet" "twohundreadok-public-subnet-2" {
 }
 
 resource "aws_subnet" "twohundreadok-private-subnet-2" {
-  vpc_id     = aws_vpc.twohundreadok-vpc.id
-  cidr_block = "10.0.0.144/28"
+  vpc_id            = aws_vpc.twohundreadok-vpc.id
+  cidr_block        = "10.0.0.144/28"
   availability_zone = "ap-northeast-2c"
 
   tags = {
