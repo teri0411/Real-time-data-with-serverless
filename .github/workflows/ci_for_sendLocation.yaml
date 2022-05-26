@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ '2.x', '3.x', 'pypy2.7', 'pypy3.7', 'pypy3.8']
+        python-version: [ '2.x', '3.x']
     steps:
     - uses: actions/checkout@v2
     - name: Use python ${{ matrix.python-version }}
