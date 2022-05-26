@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "allow_access_from_Administrators" {
   statement {
     principals {
       type        = "AWS"
-      identifiers = ["889058321615"]
+      identifiers = ["*"]
     }
 
     actions = [
