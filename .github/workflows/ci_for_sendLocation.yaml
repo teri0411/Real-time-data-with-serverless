@@ -10,6 +10,9 @@ jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: lambda/sendLocation
     strategy:
       matrix:
         python-version: [ '2.x', '3.x']
