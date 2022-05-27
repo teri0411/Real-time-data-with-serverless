@@ -108,6 +108,10 @@ resource "aws_kinesis_firehose_delivery_stream" "location-kinesis-firehose-es" {
       security_group_ids = [aws_security_group.es_sg.id]
       role_arn           = aws_iam_role.firehose_role.arn
     }
+
+    cloudwatch_logging_options {
+      enabled = true
+    }
   }
 }
 
