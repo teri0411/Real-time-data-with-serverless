@@ -22,12 +22,12 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-    # - run: npm ci
+    - run: pwd
     - name: serverless deploy
       uses: serverless/github-action@v3
       with:
         args: deploy
-        directory: ./lambda/sendLocation
+        directory: lambda/sendLocation
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
