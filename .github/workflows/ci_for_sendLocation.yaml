@@ -15,22 +15,20 @@ jobs:
         working-directory: './lambda/sendLocation'
     strategy:
       matrix:
-        python-version: [ '2.x', '3.x']
+        python-version: [ '3.x']
     steps:
     - uses: actions/checkout@v2
     - name: Use python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-    - run: pwd
+    - run: npm ci
     - name: serverless deploy
-      uses: serverless/github-action@master
+      uses: serverless/github-action@v3
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        SERVERLESS_PATH: /home/runner/work/devops-01-final-TeamC-Scenario-02/devops-01-final-TeamC-Scenario-02/lambda/sendLocation
       with:
-        args: deploy --config /home/runner/work/devops-01-final-TeamC-Scenario-02/devops-01-final-TeamC-Scenario-02/lambda/sendLocation/serverless.yml
-    - run: echo $SERVERLESS_PATH
+        args: deploy
       # env:
       #   SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
