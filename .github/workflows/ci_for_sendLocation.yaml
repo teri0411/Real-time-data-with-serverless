@@ -30,7 +30,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         SERVERLESS_PATH: /home/runner/work/devops-01-final-TeamC-Scenario-02/devops-01-final-TeamC-Scenario-02/lambda/sendLocation
       with:
-        args: deploy --config ${env.SERVERLESS_PATH}/serverless.yml
-    - run: echo ${env.SERVERLESS_PATH}
+        args: deploy --config $SERVERLESS_PATH/serverless.yml
+    - run: echo $SERVERLESS_PATH
       # env:
       #   SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
