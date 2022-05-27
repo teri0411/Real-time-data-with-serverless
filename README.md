@@ -13,4 +13,4 @@
 * 예약 정보 리스트 조회화면에서는 실시간 위치를 반영하지 않는다.
 
 ## 아키텍처
-![](https://user-images.githubusercontent.com/46926610/169455078-f18d345b-86d7-41a7-8167-6b7d2b9a5b84.png)
+![](https://user-images.githubusercontent.com/46926610/170610407-a956465d-1eff-4dbf-8311-9476f16629e7.png)
