@@ -2,8 +2,8 @@ resource "aws_opensearch_domain" "delivery_cluster" {
   domain_name = "delivery"
   cluster_config {
     instance_count         = 1
-    zone_awareness_enabled = true
-    instance_type          = "t3.micro.search"
+    zone_awareness_enabled = false
+    instance_type          = "t3.small.search"
 
   }
 
@@ -25,7 +25,7 @@ resource "aws_opensearch_domain" "delivery_cluster" {
 #             "Action": "es:*",
 #             "Principal": "*",
 #             "Effect": "Allow",
-#             "Resource": "arn:aws:es:${var.region}:${var.account_id}:domain/*" 
+#             "Resource": "${aws_kinesis_firehose_delivery_stream.location-kinesis-firehose-es.arn}"
 #         }
 #     ]
 # }
