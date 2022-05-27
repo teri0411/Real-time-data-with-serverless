@@ -7,7 +7,7 @@ def hello(event, context):
     # print(body)
 
     response = kinesis_client.put_record(
-        StreamName='project4',
+        StreamName='location_stream',
         Data = bytes(json.dumps(body).encode('utf-8')),
         PartitionKey= body['truckerId']
     )
