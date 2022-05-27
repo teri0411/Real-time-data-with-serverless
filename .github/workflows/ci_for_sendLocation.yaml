@@ -26,7 +26,7 @@ jobs:
     - name: serverless deploy
       uses: serverless/github-action@v3
       with:
-        args: deploy
+        args: deploy --config /home/runner/work/devops-01-final-TeamC-Scenario-02/devops-01-final-TeamC-Scenario-02/lambda/sendLocation/home/runner/work/devops-01-final-TeamC-Scenario-02/devops-01-final-TeamC-Scenario-02/lambda/sendLocation/serverless.yml
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
