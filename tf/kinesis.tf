@@ -18,8 +18,8 @@ resource "aws_kinesis_stream" "location_stream" {
   }
 }
 
-resource "aws_iam_role_policy" "firehose-elasticsearch" {
-  name   = "elasticsearch"
+resource "aws_iam_role_policy" "firehose-opensearch" {
+  name   = "opensearch"
   role   = aws_iam_role.firehose_role.id
   policy = <<EOF
 {
@@ -31,8 +31,8 @@ resource "aws_iam_role_policy" "firehose-elasticsearch" {
         "es:*"
       ],
       "Resource": [
-        "${aws_elasticsearch_domain.delivery_cluster.arn}",
-        "${aws_elasticsearch_domain.delivery_cluster.arn}/*"
+        "${aws_opensearch_domain.delivery_cluster.arn}",
+        "${aws_opensearch_domain.delivery_cluster.arn}/*"
       ]
         },
         {
@@ -57,7 +57,7 @@ EOF
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "terraform-kinesis-firehose-es" {
-  depends_on = [aws_iam_role_policy.firehose-elasticsearch]
+  depends_on = [aws_iam_role_policy.firehose-opensearch]
 
   name        = "terraform-kinesis-firehose-es"
   destination = "elasticsearch"
@@ -66,13 +66,13 @@ resource "aws_kinesis_firehose_delivery_stream" "terraform-kinesis-firehose-es" 
     bucket_arn = aws_s3_bucket.location-backup-bucket.arn
   }
   elasticsearch_configuration {
-    domain_arn = aws_elasticsearch_domain.delivery_cluster.arn
+    domain_arn = aws_opensearch_domain.delivery_cluster.arn
     role_arn   = aws_iam_role.firehose_role.arn
     index_name = "location"
     type_name  = "location"
 
     vpc_config {
-      subnet_ids         = [aws_subnet.twohundreadok-private-subnet.id, aws_subnet.twohundreadok-private-subnet-2.id]
+      subnet_ids         = [aws_subnet.twohundreadok-private-subnet.id]
       security_group_ids = [aws_security_group.es_sg.id]
       role_arn           = aws_iam_role.firehose_role.arn
     }

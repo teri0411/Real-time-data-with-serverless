@@ -1,9 +1,10 @@
-resource "aws_elasticsearch_domain" "delivery_cluster" {
+resource "aws_opensearch_domain" "delivery_cluster" {
   domain_name = "delivery"
   cluster_config {
-    instance_count         = 2
+    instance_count         = 1
     zone_awareness_enabled = true
-    instance_type          = "t2.small.elasticsearch"
+    instance_type          = "t3.micro.search"
+
   }
 
   ebs_options {
@@ -13,22 +14,26 @@ resource "aws_elasticsearch_domain" "delivery_cluster" {
 
   vpc_options {
     security_group_ids = [aws_security_group.es_sg.id]
-    subnet_ids         = [aws_subnet.twohundreadok-private-subnet.id, aws_subnet.twohundreadok-private-subnet-2.id]
+    subnet_ids         = [aws_subnet.twohundreadok-private-subnet.id]
   }
 
-  access_policies = <<CONFIG
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": "es:*",
-            "Principal": "*",
-            "Effect": "Allow",
-            "Resource": "arn:aws:es:${var.region}:${var.account_id}:domain/*" 
-        }
-    ]
-}
-CONFIG
+#   access_policies = <<CONFIG
+# {
+#     "Version": "2012-10-17",
+#     "Statement": [
+#         {
+#             "Action": "es:*",
+#             "Principal": "*",
+#             "Effect": "Allow",
+#             "Resource": "arn:aws:es:${var.region}:${var.account_id}:domain/*" 
+#         }
+#     ]
+# }
+# CONFIG
+
+  tags = {
+    Domain = "delivery"
+  }
 }
 
 resource "aws_security_group" "es_sg" {
