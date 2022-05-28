@@ -10,9 +10,9 @@ jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: './lambda/sendLocation'
+    # defaults:
+    #   run:
+    #     working-directory: './lambda/sendLocation'
     strategy:
       matrix:
         python-version: ["3.6", "3.7", "3.8", "3.9"]
@@ -22,13 +22,14 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Copy Folder
+      run: cp -r lambda/sendLocation/* ./
     - name: serverless deploy
       run: |
         npm install -g serverless
-        pwd
         serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         serverless plugin install -n serverless-python-requirements
-        serverless deploy --config lambda/sendLocation/serverless_sendLocation.yml
+        serverless deploy --config serverless_sendLocation.yml
       # uses: serverless/github-action@v3
       # with:
       #   args: deploy -c serverless_sendLocation.yml
