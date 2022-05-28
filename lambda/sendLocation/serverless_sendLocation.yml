@@ -16,7 +16,7 @@ provider:
  
 functions:
   sendLoc:
-    handler: handler.sendLoc
+    handler: sendLoc_handler.sendLoc
     events:
       - httpApi:
           path: /location
