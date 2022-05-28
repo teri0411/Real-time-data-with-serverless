@@ -25,6 +25,7 @@ jobs:
     - name: serverless deploy
       run: |
         npm install -g serverless
+        pwd
         serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         serverless plugin install -n serverless-python-requirements
         serverless deploy --config serverless_sendLocation.yml
