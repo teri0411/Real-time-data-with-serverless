@@ -1,7 +1,7 @@
 import json
 import boto3
 
-def hello(event, context):
+def sendLoc(event, context):
     kinesis_client = boto3.client('kinesis')
     body = json.loads(event['body'])
     # print(body)
@@ -11,5 +11,4 @@ def hello(event, context):
         Data = bytes(json.dumps(body).encode('utf-8')),
         PartitionKey= body['truckerId']
     )
-    
     return response
