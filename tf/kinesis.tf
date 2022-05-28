@@ -111,8 +111,15 @@ resource "aws_kinesis_firehose_delivery_stream" "location-kinesis-firehose-es" {
 
     cloudwatch_logging_options {
       enabled = true
+      log_group_name = "/aws/kinesisfirehose/location-kinesis-firehose-es"
+      log_stream_name = "DestinationDelivery"
     }
+    
   }
+}
+
+resource "aws_cloudwatch_log_group" "location-kinesis-firehose-es" {
+  name = "/aws/kinesisfirehose/location-kinesis-firehose-es"
 }
 
 resource "aws_s3_bucket" "location-backup-bucket" {
