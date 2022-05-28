@@ -27,6 +27,7 @@ jobs:
         cp -r lambda/sendLocation/* ./
         rm -rf lambda
         rm -rf tf
+        rm README.md
     - name: 
         serverless deploy
       # run: |
@@ -41,9 +42,7 @@ jobs:
       #   serverless deploy --config serverless_sendLocation.yml
       uses: serverless/github-action@v3
       with:
-        args: |
-          plugin install -n serverless-python-requirements
-          deploy -c serverless_sendLocation.yml
+        args: -c "serverless plugin install --name serverless-python-requirements && serverless deploy -c serverless_sendLocation.yml
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
