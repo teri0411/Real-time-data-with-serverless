@@ -25,7 +25,8 @@ jobs:
     - name: Copy Folder
       run: |
         cp -r lambda/sendLocation/* ./
-        ls
+        cp -r lambda/sendLocation/.serverless ./
+        ls -all
     - name: 
         serverless deploy
       run: |
