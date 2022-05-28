@@ -36,7 +36,7 @@ jobs:
         serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         serverless plugin install -n serverless-python-requirements
         rm serverless.yml
-        rm handler.js
+        rm handler.py
         ls -all
         serverless deploy --config serverless_sendLocation.yml
       # uses: serverless/github-action@v3
