@@ -4,7 +4,7 @@ import boto3
 def sendLoc(event, context):
     kinesis_client = boto3.client('kinesis')
     body = json.loads(event['body'])
-    # print(body)
+    print(body)
 
     response = kinesis_client.put_record(
         StreamName='location_stream',
