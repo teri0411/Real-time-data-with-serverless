@@ -1,0 +1,47 @@
+name: Deploy changeDeliveryStatus dev
+
+on:
+  push:
+    branches:
+      - develop
+    paths: ['lambda/changeDeliveryStatus/**', '.github/workflows/ci_for_changeDeliveryStatus.yaml']
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8"]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Delete Files
+      run: |
+        rm -rf lambda
+        rm -rf tf
+        rm README.md
+        rm .gitignore
+    - name: 
+        serverless deploy
+      run: |
+        npm install -g serverless
+        serverless create --template aws-python3
+        serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        serverless plugin install -n serverless-python-requirements
+        rm serverless.yml
+        rm handler.py
+        cp -r lambda/changeDeliveryStatus/* ./
+        ls -all
+        serverless deploy
+      # uses: serverless/github-action@v3
+      # with:
+      #   args: -c "serverless plugin install --name serverless-python-requirements && serverless deploy -c serverless_sendLocation.yml"
+      # env:
+      #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      # env:
+      #   SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
