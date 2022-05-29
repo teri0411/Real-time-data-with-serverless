@@ -21,7 +21,6 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Delete Files
       run: |
-        rm -rf lambda
         rm -rf tf
         rm README.md
         rm .gitignore
@@ -35,6 +34,7 @@ jobs:
         rm serverless.yml
         rm handler.py
         cp -r lambda/changeDeliveryStatus/* ./
+        rm -rf lambda
         ls -all
         serverless deploy
       # uses: serverless/github-action@v3
