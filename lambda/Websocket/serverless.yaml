@@ -1,0 +1,73 @@
+frameworkVersion: '3'
+
+custom:
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true
+      convertEmptyValues: true
+  webpack:
+    keepOutputDirectory: true
+    packager: 'npm'
+    includeModules:
+      forceExclude:
+        - aws-sdk
+package:
+  individually: true
+
+service: websocket-app
+
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-plugin-existing-s3
+  - serverless-dotenv-plugin
+  - serverless-webpack
+  - serverless-offline
+provider:
+  name: aws
+  region: ${opt:region, 'ap-northeast-2'}
+  memorySize: 512
+  role: LambdaRole
+  iam:
+    role: 'arn:aws:iam::889058321615:role/websocket'
+  versionFunctions: false
+  deploymentBucket:
+    blockPublicAccess: true
+
+resources:
+  - Resources: ${file(./config/dynamoDB.yaml)}
+  - Resources: ${file(./config/lambdaRoles.yaml)}
+
+functions:
+  websocket:
+    runtime: nodejs16.x
+    handler: lambda/websocket.handler
+    url:
+      cors: true
+    events:
+      - websocket:
+          route: $connect
+      - websocket:
+          route: $disconnect
+      - websocket:
+          route: $default
+  
+  publish:
+    runtime: python3.7
+    handler: lambda/publish.lambda_handler
+    url:
+      cors: true
+    events:
+      - stream:
+          type: dynamodb
+          batchSize: 1
+          startingPosition: LATEST
+          arn: !GetAtt
+            - subscriptionEventsTable
+            - StreamArn
