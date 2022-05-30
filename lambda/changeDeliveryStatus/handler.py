@@ -1,11 +1,12 @@
 import json
 import boto3
+import os
 
 client = boto3.client('es') # boto3.client('opensearch')
 def publishSNS(message):
     client = boto3.client('sns')
     response = client.publish(
-        TopicArn='arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatus',
+        TopicArn=os.environ['SNS_TOPIC'],
         Message=message,
         MessageStructure='string'
         )

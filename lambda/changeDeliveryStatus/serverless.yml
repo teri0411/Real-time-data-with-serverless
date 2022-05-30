@@ -11,7 +11,7 @@ provider:
         - Effect: "Allow"
           Action:
             - "sns:Publish"
-          Resource: "arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatus"
+          Resource: ${ssm:/200OK/SNS/DeliveryStatus}
 
 functions:
   startDelivery:
@@ -26,6 +26,9 @@ functions:
       - httpApi:
           path: /end
           method: get
+  environment:
+    SNS_TOPIC: ${ssm:/200OK/SNS/DeliveryStatus}
+
 
 plugins:
   - serverless-python-requirements
