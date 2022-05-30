@@ -11,7 +11,10 @@ provider:
         - Effect: "Allow"
           Action:
             - "sns:Publish"
-          Resource: "arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatus"
+          Resource: ${ssm:/200OK/SNS/DeliveryStatus}
+  environment:
+    SNS_TOPIC: ${ssm:/200OK/SNS/DeliveryStatus}
+
 
 functions:
   startDelivery:

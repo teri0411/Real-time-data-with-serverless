@@ -1,0 +1,52 @@
+topicSubscribersTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: connection
+    ProvisionedThroughput:
+      ReadCapacityUnits: 1
+      WriteCapacityUnits: 1
+    AttributeDefinitions:
+      - AttributeName: truckerId
+        AttributeType: S
+      - AttributeName: connectionId
+        AttributeType: S
+    KeySchema:
+      - AttributeName: truckerId
+        KeyType: HASH
+      - AttributeName: connectionId
+        KeyType: RANGE
+    TimeToLiveSpecification:
+      AttributeName: "ttl"
+      Enabled: true
+    GlobalSecondaryIndexes:
+      - IndexName: reverse
+        KeySchema:
+          - AttributeName: connectionId
+            KeyType: HASH
+          - AttributeName: truckerId
+            KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+subscriptionEventsTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: EventTable
+    ProvisionedThroughput:
+      ReadCapacityUnits: 1
+      WriteCapacityUnits: 1
+    AttributeDefinitions:
+      - AttributeName: truckerId
+        AttributeType: S
+      - AttributeName: id
+        AttributeType: S
+    KeySchema:
+      - AttributeName: truckerId
+        KeyType: HASH
+      - AttributeName: id
+        KeyType: RANGE
+    StreamSpecification:
+      StreamViewType: NEW_IMAGE
