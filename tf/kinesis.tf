@@ -4,7 +4,7 @@ resource "aws_kinesis_stream" "location_stream" {
 
   shard_level_metrics = [
     "IncomingBytes",
-    "OutgoingBytes",            
+    "OutgoingBytes",
   ]
 
   stream_mode_details {
@@ -161,8 +161,8 @@ resource "aws_kinesis_firehose_delivery_stream" "location-kinesis-firehose-es" {
 
   kinesis_source_configuration {
     kinesis_stream_arn = aws_kinesis_stream.location_stream.arn
-    role_arn = aws_iam_role.firehose_role.arn
-  } 
+    role_arn           = aws_iam_role.firehose_role.arn
+  }
 
   elasticsearch_configuration {
     domain_arn = aws_opensearch_domain.delivery_cluster.arn
@@ -176,11 +176,11 @@ resource "aws_kinesis_firehose_delivery_stream" "location-kinesis-firehose-es" {
     }
 
     cloudwatch_logging_options {
-      enabled = true
-      log_group_name = "/aws/kinesisfirehose/location-kinesis-firehose-es"
+      enabled         = true
+      log_group_name  = "/aws/kinesisfirehose/location-kinesis-firehose-es"
       log_stream_name = "DestinationDelivery"
     }
-    
+
   }
 }
 
@@ -212,11 +212,11 @@ resource "aws_kinesis_firehose_delivery_stream" "firehose-lambda" {
 
   kinesis_source_configuration {
     kinesis_stream_arn = aws_kinesis_stream.location_stream.arn
-    role_arn = aws_iam_role.firehose_role.arn
-  } 
+    role_arn           = aws_iam_role.firehose_role.arn
+  }
 
   http_endpoint_configuration {
-    url                = "https://kordiw5xouxg5ifex6gq5fnt7a0jvula.lambda-url.ap-northeast-2.on.aws/" 
+    url                = "https://kordiw5xouxg5ifex6gq5fnt7a0jvula.lambda-url.ap-northeast-2.on.aws/"
     name               = "New Relic"
     access_key         = "my-key"
     buffering_size     = 15

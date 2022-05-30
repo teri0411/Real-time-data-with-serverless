@@ -17,19 +17,19 @@ resource "aws_opensearch_domain" "delivery_cluster" {
     subnet_ids         = [aws_subnet.twohundreadok-private-subnet.id]
   }
 
-#   access_policies = <<CONFIG
-# {
-#     "Version": "2012-10-17",
-#     "Statement": [
-#         {
-#             "Action": "es:*",
-#             "Principal": "*",
-#             "Effect": "Allow",
-#             "Resource": "${aws_kinesis_firehose_delivery_stream.location-kinesis-firehose-es.arn}"
-#         }
-#     ]
-# }
-# CONFIG
+  #   access_policies = <<CONFIG
+  # {
+  #     "Version": "2012-10-17",
+  #     "Statement": [
+  #         {
+  #             "Action": "es:*",
+  #             "Principal": "*",
+  #             "Effect": "Allow",
+  #             "Resource": "${aws_kinesis_firehose_delivery_stream.location-kinesis-firehose-es.arn}"
+  #         }
+  #     ]
+  # }
+  # CONFIG
 
   tags = {
     Domain = "delivery"
@@ -42,11 +42,11 @@ resource "aws_security_group" "es_sg" {
   vpc_id      = aws_vpc.twohundreadok-vpc.id
 
   ingress {
-    description      = "TLS from VPC"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      = ["${aws_vpc.twohundreadok-vpc.cidr_block}"]
+    description = "TLS from VPC"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["${aws_vpc.twohundreadok-vpc.cidr_block}"]
   }
 
   egress {
