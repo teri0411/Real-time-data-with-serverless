@@ -8,3 +8,5 @@ resource "aws_ssm_parameter" "kinesis_data_stream" {
   type  = "String"
   value = aws_kinesis_stream.location_stream.name
 }
+
+# hello?
