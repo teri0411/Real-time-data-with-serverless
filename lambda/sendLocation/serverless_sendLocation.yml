@@ -6,13 +6,15 @@ provider:
   runtime: python3.8
   stage: dev
   region: ap-northeast-2
+  environment:
+    Kinesis_Data_Stream: "location_stream"
   iam:
     role:
       statements:
         - Effect: "Allow"
           Action:
             - "kinesis:Put*"
-          Resource: "arn:aws:kinesis:ap-northeast-2:889058321615:stream/location_stream"
+          Resource: "arn:aws:kinesis:ap-northeast-2:889058321615:stream/${env:Kinesis_Data_Stream}"
  
 functions:
   sendLoc:
