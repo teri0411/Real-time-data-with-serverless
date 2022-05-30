@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - develop
-    paths: ['lambda/changeDeliveryStatus/**', '.github/workflows/ci_for_changeDeliveryStatus.yaml']
+    paths: ['lambda/changeDeliveryStatus/**']
 
 jobs:
   deploy:
