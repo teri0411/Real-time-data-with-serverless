@@ -20,7 +20,7 @@ data "aws_iam_policy_document" "allow_access_from_Administrators" {
     }
 
     actions = [
-      "s3:ListBucket","s3:GetObject", "s3:PutObject"
+      "s3:ListBucket", "s3:GetObject", "s3:PutObject"
     ]
 
     resources = [
@@ -41,9 +41,9 @@ resource "aws_s3_bucket_versioning" "versioning_example" {
 
 # DynamoDB for terraform state lock
 resource "aws_dynamodb_table" "terraform_state_lock" {
-  name           = "terraform-lock"
-  hash_key       = "LockID"
-  billing_mode   = "PAY_PER_REQUEST"
+  name         = "terraform-lock"
+  hash_key     = "LockID"
+  billing_mode = "PAY_PER_REQUEST"
 
   attribute {
     name = "LockID"
