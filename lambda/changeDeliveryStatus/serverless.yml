@@ -12,6 +12,9 @@ provider:
           Action:
             - "sns:Publish"
           Resource: ${ssm:/200OK/SNS/DeliveryStatus}
+  environment:
+    SNS_TOPIC: ${ssm:/200OK/SNS/DeliveryStatus}
+
 
 functions:
   startDelivery:
@@ -26,9 +29,6 @@ functions:
       - httpApi:
           path: /end
           method: get
-  environment:
-    SNS_TOPIC: ${ssm:/200OK/SNS/DeliveryStatus}
-
 
 plugins:
   - serverless-python-requirements
