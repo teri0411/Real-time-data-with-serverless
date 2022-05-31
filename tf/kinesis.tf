@@ -238,7 +238,7 @@ resource "aws_iam_role_policy" "firehose-lambda" {
       ],
       "Resource": [
         "${aws_opensearch_domain.delivery_cluster.arn}",
-        "${aws_opensearch_domain.delivery_cluster.arn}/*"
+        "${aws_opensearch_domain.delivery_cluster.arn}*"
       ]
     },
     {
