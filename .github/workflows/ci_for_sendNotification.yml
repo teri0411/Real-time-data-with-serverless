@@ -9,22 +9,25 @@ on:
 jobs:
   deploy:
     name: deploy
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use node ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: 
-        serverless deploy
-      uses: serverless/github-action@master
-      with:
-        args: deploy
-      env:
+    runs-on: ubuntu-latest 
+    env: #Setup environmental variables for serverless deployment
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+    steps:
+      # Use github defaut action to trigger action in this repo. Mandatory
+      # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/configuring-a-workflow#using-the-checkout-action
+      - uses: actions/checkout@v1 
+
+      - name: npm install dependencies
+        run: npm install
+        
+      - name: Serverless
+        uses: serverless/github-action@v1.53.0
+        with:
+          args: deploy
+
+
+
+
+       
