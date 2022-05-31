@@ -1,0 +1,82 @@
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html
+
+LambdaRole:
+  Type: AWS::IAM::Role
+  Properties:
+    RoleName: websocket-app-${opt:region, 'ap-northeast-2'}-lambdaRole
+    AssumeRolePolicyDocument:
+      Version: "2012-10-17"
+      Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - lambda.amazonaws.com
+          Action: sts:AssumeRole
+    Policies:
+      - PolicyName: websocket-app-${opt:region, 'ap-northeast-2'}-LambdaPutBucketNotificationPolicy
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - "s3:PutBucketNotification"
+              Resource:
+                - "*"
+    ManagedPolicyArns:
+      - Ref: DynamoDBAccessPolicy
+      - Ref: DynamoDBStreamPolicy
+      - Ref: PublishToConnectionsPolicy
+      - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+      - arn:aws:iam::aws:policy/AmazonVPCFullAccess
+
+DynamoDBAccessPolicy:
+  Type: AWS::IAM::ManagedPolicy
+  Properties:
+    PolicyDocument:
+      Version: "2012-10-17"
+      Statement:
+        - Effect: Allow
+          Action:
+            - "dynamodb:GetItem"
+            - "dynamodb:PutItem"
+            - "dynamodb:BatchWriteItem"
+            - "dynamodb:Query"
+          Resource:
+            - !GetAtt subscriptionEventsTable.Arn
+            - !GetAtt topicSubscribersTable.Arn
+            - !Join
+              - ""
+              - - !GetAtt topicSubscribersTable.Arn
+                - "/index/reverse"
+
+DynamoDBStreamPolicy:
+  Type: AWS::IAM::ManagedPolicy
+  Properties:
+    PolicyDocument:
+      Version: "2012-10-17"
+      Statement:
+        - Effect: Allow
+          Action:
+            - "dynamodb:DescribeStream"
+            - "dynamodb:GetRecords"
+            - "dynamodb:GetShardIterator"
+            - "dynamodb:ListStreams"
+          Resource: !GetAtt subscriptionEventsTable.StreamArn
+
+PublishToConnectionsPolicy:
+  Type: AWS::IAM::ManagedPolicy
+  Properties:
+    PolicyDocument:
+      Version: "2012-10-17"
+      Statement:
+        - Effect: Allow
+          Action:
+            - "execute-api:Invoke"
+            - "execute-api:ManageConnections"
+          Resource: !Join
+            - ""
+            - - "arn:aws:execute-api:ap-south-1:"
+              - !Ref "AWS::AccountId"
+              - ":"
+              - !Ref WebsocketsApi
+              - "/${opt:stage, 'dev'}/*/*"

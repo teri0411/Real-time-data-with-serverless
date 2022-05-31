@@ -1,0 +1,32 @@
+service: sendLoc
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: dev
+  region: ap-northeast-2
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "kinesis:Put*"
+          Resource: arn:aws:kinesis:ap-northeast-2:889058321615:stream/${ssm:/200OK/Kinesis/Data_Stream_Name}
+
+functions:
+  sendLoc:
+    handler: sendLoc_handler.sendLoc
+    events:
+      - httpApi:
+          path: /location
+          method: post
+    environment:
+      Kinesis_Data_Stream: ${ssm:/200OK/Kinesis/Data_Stream_Name}
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
