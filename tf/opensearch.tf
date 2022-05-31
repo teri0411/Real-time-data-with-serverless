@@ -42,11 +42,11 @@ resource "aws_security_group" "es_sg" {
   vpc_id      = aws_vpc.twohundreadok-vpc.id
 
   ingress {
-    description = "TLS from VPC"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["${aws_vpc.twohundreadok-vpc.cidr_block}"]
+    description      = "TLS from VPC"
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+    cidr_blocks      = [aws_vpc.twohundreadok-vpc.cidr_block]
   }
 
   egress {
@@ -61,4 +61,3 @@ resource "aws_security_group" "es_sg" {
     Name = "es_sg"
   }
 }
-

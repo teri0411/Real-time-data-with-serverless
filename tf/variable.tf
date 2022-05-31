@@ -10,3 +10,9 @@ variable "account_id" {
   description = "account_id"
 }
 
+variable ENDPOINT_URL {
+  type        = string
+}
+
+
+

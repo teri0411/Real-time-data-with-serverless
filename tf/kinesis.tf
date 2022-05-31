@@ -12,7 +12,6 @@ resource "aws_kinesis_stream" "location_stream" {
   }
 
   tags = {
-    Environment = "dev"
   }
 }
 
@@ -49,10 +48,7 @@ resource "aws_iam_role_policy" "firehose-opensearch" {
                 "s3:ListBucketMultipartUploads",
                 "s3:PutObject"
             ],
-            "Resource": [
-                "arn:aws:s3:::project4test",
-                "arn:aws:s3:::project4test/*"
-            ]
+            "Resource": "*"
         },
         {
             "Sid": "",
@@ -91,7 +87,7 @@ resource "aws_iam_role_policy" "firehose-opensearch" {
                 "logs:PutLogEvents"
             ],
             "Resource": [
-                "arn:aws:logs:ap-northeast-2:889058321615:log-group:/aws/kinesisfirehose/datatolambda_firehose:log-stream:*",
+                "arn:aws:logs:ap-northeast-2:889058321615:log-group:/aws/kinesisfirehose/firehose-lambda:log-stream:*",
                 "arn:aws:logs:ap-northeast-2:889058321615:log-group:%FIREHOSE_POLICY_TEMPLATE_PLACEHOLDER%:log-stream:*"
             ]
         },
@@ -175,11 +171,6 @@ resource "aws_kinesis_firehose_delivery_stream" "location-kinesis-firehose-es" {
       role_arn           = aws_iam_role.firehose_role.arn
     }
 
-    cloudwatch_logging_options {
-      enabled         = true
-      log_group_name  = "/aws/kinesisfirehose/location-kinesis-firehose-es"
-      log_stream_name = "DestinationDelivery"
-    }
 
   }
 }
@@ -216,27 +207,20 @@ resource "aws_kinesis_firehose_delivery_stream" "firehose-lambda" {
   }
 
   http_endpoint_configuration {
-    url                = "https://kordiw5xouxg5ifex6gq5fnt7a0jvula.lambda-url.ap-northeast-2.on.aws/"
-    name               = "New Relic"
-    access_key         = "my-key"
-    buffering_size     = 15
-    buffering_interval = 600
+    url                = var.ENDPOINT_URL
+    name               = "Http endpoint"
+    buffering_size     = 5
+    buffering_interval = 60
     role_arn           = aws_iam_role.firehose_role.arn
     s3_backup_mode     = "FailedDataOnly"
 
-    # request_configuration {
-    #   content_encoding = "GZIP"
+    cloudwatch_logging_options {
+      enabled = true
+      log_group_name = "/aws/kinesisfirehose/firehose-lambda"
+      log_stream_name = "DestinationDelivery"
+    }
 
-    #   common_attributes {
-    #     name  = "testname"
-    #     value = "testvalue"
-    #   }
 
-    #   common_attributes {
-    #     name  = "testname2"
-    #     value = "testvalue2"
-    #   }
-    # }
   }
 }
 
@@ -279,7 +263,16 @@ resource "aws_iam_role_policy" "firehose-lambda" {
         "kinesis:*"
       ],
       "Resource": "${aws_kinesis_stream.location_stream.arn}"
-    }
+    },
+     {
+      "Effect": "Allow",
+      "Action": [
+        "firehose:*"
+            ],
+            
+      "Resource": "*"
+        }
+
   ]
 }
 EOF
@@ -303,4 +296,13 @@ resource "aws_iam_role" "firehose_lambda_role" {
   ]
 }
 EOF
+}
+
+resource "aws_cloudwatch_log_group" "firehose-lambda" {
+  name = "/aws/kinesisfirehose/firehose-lambda"
+}
+
+resource "aws_cloudwatch_log_stream" "DestinationDelivery" {
+  name           = "DestinationDelivery"
+  log_group_name = aws_cloudwatch_log_group.firehose-lambda.name
 }
