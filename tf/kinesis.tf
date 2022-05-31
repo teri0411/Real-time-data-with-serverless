@@ -4,7 +4,7 @@ resource "aws_kinesis_stream" "location_stream" {
 
   shard_level_metrics = [
     "IncomingBytes",
-    "OutgoingBytes",            
+    "OutgoingBytes",
   ]
 
   stream_mode_details {
@@ -12,52 +12,114 @@ resource "aws_kinesis_stream" "location_stream" {
   }
 
   tags = {
-    Environment = "dev"
   }
 }
 
 
 resource "aws_iam_role_policy" "firehose-opensearch" {
-  name   = "opensearch"
+  name   = "firehose-opensearch"
   role   = aws_iam_role.firehose_role.id
   policy = <<EOF
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "es:*"
-      ],
-      "Resource": [
-        "${aws_opensearch_domain.delivery_cluster.arn}",
-        "${aws_opensearch_domain.delivery_cluster.arn}/*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DescribeVpcs",
-        "ec2:DescribeVpcAttribute",
-        "ec2:DescribeSubnets",
-        "ec2:DescribeSecurityGroups",
-        "ec2:DescribeNetworkInterfaces",
-        "ec2:CreateNetworkInterface",
-        "ec2:CreateNetworkInterfacePermission",
-        "ec2:DeleteNetworkInterface"
-      ],
-      "Resource": [
-        "*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "kinesis:*"
-      ],
-      "Resource": "${aws_kinesis_stream.location_stream.arn}"
-    }
-  ]
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "",
+            "Effect": "Allow",
+            "Action": [
+                "glue:GetTable",
+                "glue:GetTableVersion",
+                "glue:GetTableVersions"
+            ],
+            "Resource": [
+                "arn:aws:glue:ap-northeast-2:889058321615:catalog",
+                "arn:aws:glue:ap-northeast-2:889058321615:database/%FIREHOSE_POLICY_TEMPLATE_PLACEHOLDER%",
+                "arn:aws:glue:ap-northeast-2:889058321615:table/%FIREHOSE_POLICY_TEMPLATE_PLACEHOLDER%/%FIREHOSE_POLICY_TEMPLATE_PLACEHOLDER%"
+            ]
+        },
+        {
+            "Sid": "",
+            "Effect": "Allow",
+            "Action": [
+                "s3:AbortMultipartUpload",
+                "s3:GetBucketLocation",
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:ListBucketMultipartUploads",
+                "s3:PutObject"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:InvokeFunction",
+                "lambda:GetFunctionConfiguration"
+            ],
+            "Resource": "arn:aws:lambda:ap-northeast-2:889058321615:function:%FIREHOSE_POLICY_TEMPLATE_PLACEHOLDER%"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "kms:GenerateDataKey",
+                "kms:Decrypt"
+            ],
+            "Resource": [
+                "arn:aws:kms:ap-northeast-2:889058321615:key/%FIREHOSE_POLICY_TEMPLATE_PLACEHOLDER%"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "kms:ViaService": "s3.ap-northeast-2.amazonaws.com"
+                },
+                "StringLike": {
+                    "kms:EncryptionContext:aws:s3:arn": [
+                        "arn:aws:s3:::%FIREHOSE_POLICY_TEMPLATE_PLACEHOLDER%/*",
+                        "arn:aws:s3:::%FIREHOSE_POLICY_TEMPLATE_PLACEHOLDER%"
+                    ]
+                }
+            }
+        },
+        {
+            "Sid": "",
+            "Effect": "Allow",
+            "Action": [
+                "logs:PutLogEvents"
+            ],
+            "Resource": [
+                "arn:aws:logs:ap-northeast-2:889058321615:log-group:/aws/kinesisfirehose/firehose-lambda:log-stream:*",
+                "arn:aws:logs:ap-northeast-2:889058321615:log-group:%FIREHOSE_POLICY_TEMPLATE_PLACEHOLDER%:log-stream:*"
+            ]
+        },
+        {
+            "Sid": "",
+            "Effect": "Allow",
+            "Action": [
+                "kinesis:DescribeStream",
+                "kinesis:GetShardIterator",
+                "kinesis:GetRecords",
+                "kinesis:ListShards"
+            ],
+            "Resource": "${aws_kinesis_stream.location_stream.arn}"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "kms:Decrypt"
+            ],
+            "Resource": [
+                "arn:aws:kms:ap-northeast-2:889058321615:key/%FIREHOSE_POLICY_TEMPLATE_PLACEHOLDER%"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "kms:ViaService": "kinesis.ap-northeast-2.amazonaws.com"
+                },
+                "StringLike": {
+                    "kms:EncryptionContext:aws:kinesis:arn": "arn:aws:kinesis:ap-northeast-2:889058321615:stream/project4"
+                }
+            }
+        }
+    ]
 }
 EOF
 }
@@ -95,8 +157,8 @@ resource "aws_kinesis_firehose_delivery_stream" "location-kinesis-firehose-es" {
 
   kinesis_source_configuration {
     kinesis_stream_arn = aws_kinesis_stream.location_stream.arn
-    role_arn = aws_iam_role.firehose_role.arn
-  } 
+    role_arn           = aws_iam_role.firehose_role.arn
+  }
 
   elasticsearch_configuration {
     domain_arn = aws_opensearch_domain.delivery_cluster.arn
@@ -109,12 +171,7 @@ resource "aws_kinesis_firehose_delivery_stream" "location-kinesis-firehose-es" {
       role_arn           = aws_iam_role.firehose_role.arn
     }
 
-    cloudwatch_logging_options {
-      enabled = true
-      log_group_name = "/aws/kinesisfirehose/location-kinesis-firehose-es"
-      log_stream_name = "DestinationDelivery"
-    }
-    
+
   }
 }
 
@@ -129,4 +186,123 @@ resource "aws_s3_bucket" "location-backup-bucket" {
 resource "aws_s3_bucket_acl" "bucket_acl" {
   bucket = aws_s3_bucket.location-backup-bucket.id
   acl    = "private"
+}
+
+# kinesis firehose (HTTP Endpoint Destination)
+resource "aws_kinesis_firehose_delivery_stream" "firehose-lambda" {
+  name        = "firehose-lambda"
+  destination = "http_endpoint"
+
+  s3_configuration {
+    role_arn   = aws_iam_role.firehose_role.arn
+    bucket_arn = aws_s3_bucket.location-backup-bucket.arn
+    # buffer_size        = 10
+    # buffer_interval    = 400
+    # compression_format = "GZIP"
+  }
+
+  kinesis_source_configuration {
+    kinesis_stream_arn = aws_kinesis_stream.location_stream.arn
+    role_arn           = aws_iam_role.firehose_role.arn
+  }
+
+  http_endpoint_configuration {
+    url                = var.ENDPOINT_URL
+    name               = "Http endpoint"
+    buffering_size     = 5
+    buffering_interval = 60
+    role_arn           = aws_iam_role.firehose_role.arn
+    s3_backup_mode     = "FailedDataOnly"
+
+    cloudwatch_logging_options {
+      enabled = true
+      log_group_name = "/aws/kinesisfirehose/firehose-lambda"
+      log_stream_name = "DestinationDelivery"
+    }
+
+
+  }
+}
+
+resource "aws_iam_role_policy" "firehose-lambda" {
+  name   = "opensearch"
+  role   = aws_iam_role.firehose_lambda_role.id
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "es:*"
+      ],
+      "Resource": [
+        "${aws_opensearch_domain.delivery_cluster.arn}",
+        "${aws_opensearch_domain.delivery_cluster.arn}/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeVpcs",
+        "ec2:DescribeVpcAttribute",
+        "ec2:DescribeSubnets",
+        "ec2:DescribeSecurityGroups",
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:CreateNetworkInterface",
+        "ec2:CreateNetworkInterfacePermission",
+        "ec2:DeleteNetworkInterface"
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "kinesis:*"
+      ],
+      "Resource": "${aws_kinesis_stream.location_stream.arn}"
+    },
+     {
+      "Effect": "Allow",
+      "Action": [
+        "firehose:*"
+            ],
+            
+      "Resource": "*"
+        }
+
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role" "firehose_lambda_role" {
+  name = "firehose_lambda_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "firehose.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_cloudwatch_log_group" "firehose-lambda" {
+  name = "/aws/kinesisfirehose/firehose-lambda"
+}
+
+resource "aws_cloudwatch_log_stream" "DestinationDelivery" {
+  name           = "DestinationDelivery"
+  log_group_name = aws_cloudwatch_log_group.firehose-lambda.name
 }

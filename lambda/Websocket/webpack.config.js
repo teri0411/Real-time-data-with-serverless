@@ -1,5 +1,6 @@
 const path = require('path');
 const slsw = require('serverless-webpack');
+const webpack = require('webpack');
 
 function srcPath(subdir) {
   return path.join(__dirname, subdir);
@@ -7,7 +8,11 @@ function srcPath(subdir) {
 
 module.exports = {
   context: __dirname,
-  plugins: [],
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.ENDPOINT_URL': JSON.stringify(process.env.ENDPOINT_URL),
+    }),
+  ],
   entry: slsw.lib.entries,
   externals: ['ws', 'encoding', { 'aws-sdk': 'commonjs aws-sdk' }],
   mode: 'development',

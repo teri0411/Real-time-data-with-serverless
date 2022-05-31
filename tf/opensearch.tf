@@ -46,7 +46,7 @@ resource "aws_security_group" "es_sg" {
     from_port        = 443
     to_port          = 443
     protocol         = "tcp"
-    cidr_blocks      = ["${aws_vpc.twohundreadok-vpc.cidr_block}"]
+    cidr_blocks      = [aws_vpc.twohundreadok-vpc.cidr_block]
   }
 
   egress {
@@ -61,4 +61,3 @@ resource "aws_security_group" "es_sg" {
     Name = "es_sg"
   }
 }
-
