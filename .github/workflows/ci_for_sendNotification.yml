@@ -31,7 +31,6 @@ jobs:
         run: |
           npm install -g serverless
           serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          rm serverless.yml
           cp -r lambda/changeDeliveryStatus/* ./
           npm install
           rm -rf lambda
