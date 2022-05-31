@@ -6,7 +6,7 @@ const sns = new AWS.SNS({ region: 'ap-northeast-2' });
 module.exports.hello = async (event) => {
   console.log(event['Records'][0]['body'])
   let params = {
-    Message: 'MESSGa_TEXT', /* required */
+    Message: 'MESSG_TEXT', /* required */
     TopicArn: 'arn:aws:sns:ap-northeast-2:889058321615:project4test'
 
   };
