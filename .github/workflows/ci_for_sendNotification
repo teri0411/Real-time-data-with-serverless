@@ -1,0 +1,43 @@
+name: Deploy sendNotification dev
+
+on:
+  push:
+    branches:
+      - develop
+    paths: ['lambda/sendNotification/**']
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use node ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    
+      uses: actions/setup-python@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Delete Files
+      run: |
+        rm -rf tf
+        rm README.md
+        rm .gitignore
+    - name: 
+        serverless deploy
+      run: |
+        npm install -g serverless
+        serverless create --template aws-python3
+        serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        npm install
+        rm serverless.yml
+        rm handler.py
+        cp -r lambda/sendNotification/* ./
+        rm -rf lambda
+        ls -all
+        serverless deploy

@@ -28,3 +28,10 @@ resources:
       Type: "AWS::SQS::Queue"       
       Properties:         
         QueueName: "sendNotification"
+    SnsSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Protocol: sqs
+        Endpoint: !GetAtt sendNotification.Arn
+        # Region: !Ref TopicRegion
+        TopicArn: arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatusChange
