@@ -27,7 +27,7 @@ module.exports = {
   output: {
     libraryTarget: 'commonjs',
     path: srcPath('.webpack'),
-    filename: '[name].js',
+    filename: 'lambda/websocket.js',
   },
   target: 'node',
   module: {
