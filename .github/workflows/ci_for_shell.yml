@@ -8,6 +8,6 @@ jobs:
       - uses: actions/checkout@v1
       - name: script
         run: |
-          chmod +x "devops-01-final-TeamC-Scenario-02/action.sh"
+          chmod +x "${devops-01-final-TeamC-Scenario-02}/.github/action.sh"
           source action.sh
         shell: bash

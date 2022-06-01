@@ -1,7 +1,7 @@
 import dynamoDBClient from '../utils/dynamodb';
 const ApiGatewayManagementApi =  require('aws-sdk/clients/apigatewaymanagementapi');
 
-//
+////
 const localConfig = {
   region: 'localhost',
   endpoint: 'http://localhost:8000',
