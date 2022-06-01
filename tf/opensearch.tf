@@ -17,23 +17,24 @@ resource "aws_opensearch_domain" "delivery_cluster" {
     subnet_ids         = [aws_subnet.twohundreadok-private-subnet.id]
   }
 
-#   access_policies = <<CONFIG
-# {
-#     "Version": "2012-10-17",
-#     "Statement": [
-#         {
-#             "Action": "es:*",
-#             "Principal": "*",
-#             "Effect": "Allow",
-#             "Resource": "${aws_kinesis_firehose_delivery_stream.location-kinesis-firehose-es.arn}"
-#         }
-#     ]
-# }
-# CONFIG
+ # access_policies = <<CONFIG
+#{
+#    "Version": "2012-10-17",
+#    "Statement": [
+#        {
+#            "Action": "es:*",
+#            "Principal": "*",
+#            "Effect": "Allow",
+#            "Resource": "${aws_iam_role_policy.firehose-lambda.arn}"
+#        }
+#    ]
+#}
+#CONFIG
 
   tags = {
     Domain = "delivery"
   }
+
 }
 
 resource "aws_security_group" "es_sg" {

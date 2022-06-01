@@ -1,4 +1,4 @@
-import http from 'k6/http';
+                                                                                      import http from 'k6/http';
 import { sleep, check } from 'k6';
 import { Counter } from 'k6/metrics';
 
@@ -24,13 +24,14 @@ export const options = {
 export default function () {
   // our HTTP request, note that we are saving the response to res, which can be accessed later
   const payload = {"input":1};
+  const getRandom = Math.random() * (1 - 100) + 1;
 
-  const driverData =  {"truckerId": "588866", "@timestamp_utc": "2022-05-17T08:02:55.567Z", "location": {"lat": 37.3044668,"lon": 127.0422522}};
+  const driverData =  {"truckerId": "588866", "@timestamp_utc": "2022-05-17T08:02:55.567Z", "location": {"lat": getRandom ,"lon": getRandom}};
   const headers = {
     'Content-Type': 'application/json',
     'dataType': 'json'
   };
-  const res = http.request('POST', 'https://rw889qof50.execute-api.ap-northeast-2.amazonaws.com/location', // 주소 바꾸세요
+  const res = http.request('POST', 'https://rrbmyhdt4g.execute-api.ap-northeast-2.amazonaws.com/location', // 주소 바꾸세요
   JSON.stringify(driverData),  {
     headers: headers,
   });
