@@ -26,7 +26,7 @@ service: websocket-app
 plugins:
   - serverless-dynamodb-local
   - serverless-plugin-existing-s3
-  - serverless-dotenv-plugin
+  #- serverless-dotenv-plugin
   - serverless-webpack
   - serverless-offline
 provider:
