@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop
-    paths: ['./**']
 
 jobs:
   run:
@@ -16,6 +15,7 @@ jobs:
           chmod +x ./action.sh
           source action.sh
         shell: bash
+
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
