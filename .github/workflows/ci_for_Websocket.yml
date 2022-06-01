@@ -29,8 +29,9 @@ jobs:
       - name:
           env setting
         run: |
-          export ENDPOINT_URL=$(aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r)
-          echo $ENDPOINT_URL
+          echo ${export ENDPOINT_URL=$(aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r)} >> $env:GITHUB_ENV
+          env:
+            ENDPOINT_URL: GITHUB_ENV
       - name:  
           serverless deploy
         run: |
