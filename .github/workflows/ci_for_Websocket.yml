@@ -29,7 +29,7 @@ jobs:
       - name:
           env setting
         run: |
-          echo ${export ENDPOINT_URL=$(aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r)}
+          echo {export ENDPOINT_URL=$(aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r)}
 
       - name:  
           serverless deploy
