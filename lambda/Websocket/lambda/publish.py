@@ -1,6 +1,5 @@
 import base64
 import requests
-import gzip
 import json
 import boto3
 import os
@@ -10,6 +9,8 @@ import botocore
 
 def lambda_handler(event, context):
 
+  print(event)
+  print("----------event-----------")
   try:
 ######################################################
     test = event["body"]
@@ -19,7 +20,7 @@ def lambda_handler(event, context):
     json_data = json.loads(test)
     print('-----json_data---???')
     print(json_data)
-    
+      
     value = json_data["records"][0]
     data = value["data"]
     base64_bytes = data.encode('ascii')
@@ -27,20 +28,20 @@ def lambda_handler(event, context):
     msg = decodedBytes.decode('ascii')
     print("----msg----")
     print(msg)
-    
+      
     print('typetuype-----???????')
-    
+      
     print(type(msg))
-    
+      
     msg_data = json.loads(msg)
-    
+      
     truckerId = msg_data["truckerId"]
-    
+      
     # truckerIds = msg["truckerId"]
     print("---truckerId?????????????????")
     print(truckerId)
-    
-    
+      
+      
     client = boto3.client(
       'dynamodb',
       aws_access_key_id= os.environ['aws_access_key_id'] ,
@@ -60,14 +61,14 @@ def lambda_handler(event, context):
     print('--data2-----------------------------')
     print(data2)
 
-    
-    # for 문으로 truckerId 전부 조회 != 일치하는 truckerId가 없을때, 
-    
+      
+      # for 문으로 truckerId 전부 조회 != 일치하는 truckerId가 없을때, 
+      
 
-    #r = table.get_item(truckerId=truckerId)
-    #print('*******reponse- 있는데이터나와야함*****************************')
-    #print(r)
-    clientApi = boto3.client('apigatewaymanagementapi', endpoint_url= os.environ['ENDPOINT_URL'])
+      #r = table.get_item(truckerId=truckerId)
+      #print('*******reponse- 있는데이터나와야함*****************************')
+      #print(r)
+    clientApi = boto3.client('apigatewaymanagementapi', endpoint_url= os.environ['WEBSOCKET_URL'])
     print(os.environ['ENDPOINT_URL'])
     connectionId = response['Items'][0]["connectionId"]
     ##
@@ -76,6 +77,7 @@ def lambda_handler(event, context):
       )
     print("???result???")
     print(result)
+
     if result["Count"]>0:
       clientApi.post_to_connection(Data=msg, ConnectionId=connectionId)
       print(result["Count"])
@@ -83,20 +85,23 @@ def lambda_handler(event, context):
     else:
       print("아이템없어서 못줌")
   except:
-    print("시도못함")
+    print("try 못함")
 
-
+  response = requests.get(os.environ['WEBSOCKET_URL'])
+  print("-----response")
+  print(response)
   return {
     'statusCode': 200,
-    'body': json.dumps('Hello from Lambda!')
+    'body': json.dumps("hello, publish message server here.")
     }
-     # catch      
-      # except botocore.exceptions.ClientError as e:
-      #   # print(e)
-      #   return { 'statusCode': 500,
-      #               'body': 'something went wrong' }
 
-  # return { 'statusCode': 200, "body": 'connected'}
+      # catch      
+        # except botocore.exceptions.ClientError as e:
+        #   # print(e)
+        #   return { 'statusCode': 500,
+        #               'body': 'something went wrong' }
+
+    # return { 'statusCode': 200, "body": 'connected'}
 
     
   
