@@ -1,6 +1,10 @@
 name: run-script
-on: push
 
+on:
+  push:
+    branches:
+      - develop
+    paths: ['./**']
 
 jobs:
   run:
