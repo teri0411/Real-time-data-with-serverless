@@ -1,0 +1,13 @@
+name: run-script
+on: push
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: script
+        run: |
+          chmod +x "devops-01-final-TeamC-Scenario-02/action.sh"
+          source action.sh
+        shell: bash
