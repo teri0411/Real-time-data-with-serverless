@@ -1,7 +1,7 @@
 name: Deploy Websocket dev
 
 on:
-  push:
+  release:
     branches:
       - develop
     paths: ['lambda/Websocket/**']
