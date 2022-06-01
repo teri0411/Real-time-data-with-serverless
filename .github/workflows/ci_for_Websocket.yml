@@ -26,10 +26,17 @@ jobs:
           rm -rf tf
           rm README.md
           rm .gitignore
+      - name:
+          env setting
+        run: |
+          export ENDPOINT_URL=$(aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r)}
+          echo ENDPOINT_URL
+
       - name:  
           serverless deploy
         run: |
           npm install -g serverless
+          npm install -g serverless-dotenv-plugin
           serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           cp -r lambda/Websocket/* ./
           npm install
