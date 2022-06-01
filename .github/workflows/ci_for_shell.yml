@@ -9,6 +9,13 @@ jobs:
   run:
     runs-on: ubuntu-18.04
     steps:
+      - name: Configure AWS credentials from Test account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+          
       - uses: actions/checkout@v1
       - name: script
         run: |
@@ -16,7 +23,5 @@ jobs:
           source action.sh
         shell: bash
 
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
+
+
