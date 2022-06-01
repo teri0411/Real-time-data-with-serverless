@@ -26,11 +26,11 @@ jobs:
           rm -rf tf
           rm README.md
           rm .gitignore
-      - name:
-          env setting
-        run: |
-          echo "ENDPOINT_URL=$(aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r)}" >> $GITHUB_ENV
-          echo "${{ env.ENDPOINT_URL }}"
+#       - name:
+#           env setting
+#         run: |
+#           echo "ENDPOINT_URL=$(aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r)}" >> $GITHUB_ENV
+#           echo "${{ env.ENDPOINT_URL }}"
 
       - name:  
           serverless deploy
@@ -41,4 +41,6 @@ jobs:
           cp -r lambda/Websocket/* ./
           npm install
           ls -all
+          echo "ENDPOINT_URL=$(aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r)}" >> $GITHUB_ENV
+          echo "${{ env.ENDPOINT_URL }}"
           serverless deploy
