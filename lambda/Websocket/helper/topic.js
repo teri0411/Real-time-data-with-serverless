@@ -1,6 +1,6 @@
 import dynamoDBClient from '../utils/dynamodb';
 import Client from './client';
-
+///
 
 class Topic {
   truckerId;
