@@ -18,8 +18,9 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo ENDPOINT_URL=https://qmtkjfmydopdc7irkapqeooc6a0yjnbz.lambda-url.ap-northeast-2.on.aws/ >> .env
-          cat .env
+          echo ENDPOINT_URL=${aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r} >> .env
+          cat .env >> $GITHUB_ENV
+
       - name: Set the value
         id: step_one
         run: |
