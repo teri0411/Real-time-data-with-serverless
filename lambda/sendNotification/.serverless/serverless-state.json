@@ -17,10 +17,13 @@
               "Action": [
                 "sns:Publish"
               ],
-              "Resource": "arn:aws:sns:ap-northeast-2:889058321615:project4test"
+              "Resource": "arn:aws:sns:ap-northeast-2:889058321615:NotificationSend"
             }
           ]
         }
+      },
+      "environment": {
+        "SNS_TOPIC": "arn:aws:sns:ap-northeast-2:889058321615:NotificationSend"
       },
       "stage": "dev",
       "versionFunctions": true,
@@ -206,13 +209,18 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sendNotification/dev/1653900095864-2022-05-30T08:41:35.864Z/sendNotification.zip"
+                "S3Key": "serverless/sendNotification/dev/1654145350377-2022-06-02T04:49:10.377Z/sendNotification.zip"
               },
               "Handler": "handler.hello",
               "Runtime": "nodejs14.x",
               "FunctionName": "sendNotification-dev-hello",
               "MemorySize": 1024,
               "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "SNS_TOPIC": "arn:aws:sns:ap-northeast-2:889058321615:NotificationSend"
+                }
+              },
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
@@ -224,14 +232,14 @@
               "HelloLogGroup"
             ]
           },
-          "HelloLambdaVersionZ7C7GfzUsz7NcAVQsw6jbtoxce4w1Uuxqz3LQSLA7E": {
+          "HelloLambdaVersionUZ6G98lRnOK5NtCnmBBtmOWIY0pnNdwneDlbcAiYZI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "HelloLambdaFunction"
               },
-              "CodeSha256": "ONuu0wHdvSJNxOOoHKzfaud+FNyV9nuJfyK9ToDyY4k="
+              "CodeSha256": "0MAGbs2+bFwqOrjfl9pXIwgb7ksAU6wmWfYcWacC9GQ="
             }
           },
           "HelloEventSourceMappingSQSSendNotification": {
@@ -288,7 +296,7 @@
           "HelloLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "HelloLambdaVersionZ7C7GfzUsz7NcAVQsw6jbtoxce4w1Uuxqz3LQSLA7E"
+              "Ref": "HelloLambdaVersionUZ6G98lRnOK5NtCnmBBtmOWIY0pnNdwneDlbcAiYZI"
             },
             "Export": {
               "Name": "sls-sendNotification-dev-HelloLambdaFunctionQualifiedArn"
@@ -399,7 +407,7 @@
         "timeout": 6,
         "runtime": "nodejs14.x",
         "vpc": {},
-        "versionLogicalId": "HelloLambdaVersionZ7C7GfzUsz7NcAVQsw6jbtoxce4w1Uuxqz3LQSLA7E"
+        "versionLogicalId": "HelloLambdaVersionUZ6G98lRnOK5NtCnmBBtmOWIY0pnNdwneDlbcAiYZI"
       }
     },
     "resources": {
@@ -445,7 +453,7 @@
     "artifact": "/home/jang/devops-01-final-TeamC-Scenario-02/lambda/sendNotification/.serverless/sendNotification.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/sendNotification/dev/1653900095864-2022-05-30T08:41:35.864Z",
+    "artifactDirectoryName": "serverless/sendNotification/dev/1654145350377-2022-06-02T04:49:10.377Z",
     "artifact": "sendNotification.zip"
   }
 }
