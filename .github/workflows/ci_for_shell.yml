@@ -16,11 +16,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      - name: extract env
-        run: |
-          BUILD_VERSION=$(awk -F \" '$2 == "version" {print $4}' package.json)
-          echo "ENDPOINT_URL=$ENDPOINT_URL" >> $GITHUB_ENV
-
       - uses: actions/checkout@v1
       - name: script
         run: |
