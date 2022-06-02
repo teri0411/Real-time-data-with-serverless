@@ -21,7 +21,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Copy Folder
       run: |
-        rm .
+        rm *
         cp -r lambda/sendLocation/* ./
         rm -rf lambda
         rm -rf tf
