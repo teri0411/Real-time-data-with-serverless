@@ -16,7 +16,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-    steps:
       - name: Set the value
         id: step_one
         run: |
@@ -32,7 +31,7 @@ jobs:
         run: |
           chmod +x ./action.sh
           source action.sh
-          
+
         shell: bash
 
 
