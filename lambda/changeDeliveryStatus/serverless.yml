@@ -3,8 +3,13 @@ frameworkVersion: '3'
 
 provider:
   name: aws
-  runtime: python3.8
+  runtime: python3.7
   region: ap-northeast-2
+  vpc:
+    securityGroupIds:
+      - ${ssm:/200OK/Security_Group/ID}
+    subnetIds:
+      - ${ssm:/200OK/subnet/ID}
   iam:
     role:
       statements:
@@ -12,9 +17,13 @@ provider:
           Action:
             - "sns:Publish"
           Resource: ${ssm:/200OK/SNS/DeliveryStatus}
+        - Effect: "Allow"
+          Action:
+            - "es:*"
+          Resource: ["${ssm:/200OK/Opensearch/Arn}", "${ssm:/200OK/Opensearch/Arn}/*"]
   environment:
     SNS_TOPIC: ${ssm:/200OK/SNS/DeliveryStatus}
-
+    OPENSEARCH_ENDPOINT: ${ssm:/200OK/Opensearch/Endpoint}
 
 functions:
   startDelivery:
@@ -22,13 +31,13 @@ functions:
     events:
       - httpApi:
           path: /start
-          method: get
+          method: post
   endDelivery:
     handler: handler.end
     events:
       - httpApi:
           path: /end
-          method: get
+          method: post
 
 plugins:
   - serverless-python-requirements
@@ -36,3 +45,4 @@ plugins:
 custom:
   pythonRequirements:
     dockerizePip: true
+    fileName: requirements.txt
