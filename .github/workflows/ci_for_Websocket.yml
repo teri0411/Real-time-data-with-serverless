@@ -1,0 +1,86 @@
+name: Deploy Websocket dev
+
+on:
+  push:
+    branches:
+      - develop
+    paths: ['lambda/Websocket/**']
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest 
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      # Use github defaut action to trigger action in this repo. Mandatory
+      # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/configuring-a-workflow#using-the-checkout-action
+      - uses: actions/checkout@v3
+      - name: Use node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Delete Files
+        run: |
+          rm -rf tf
+          rm README.md
+          rm .gitignore
+
+      - name: Configure AWS credentials from Test account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+     
+      - name: Create env file
+        run: |
+          touch .env
+          echo aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env
+          echo aws_secret_key_id=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env
+          echo TOPICS_TABLE=connection >> .env
+          echo ENDPOINT_URL= >> .env
+          echo WEBSOCKET= >> .env
+          echo WEBSOCKET_URL= >> .env
+          cat .env
+          cat .env >> $GITHUB_ENV
+
+ 
+      - name: Set the ENDPOINT_URL
+        run: |
+          echo 'ENDPOINT_URL<<EOF' >> $GITHUB_ENV
+          aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+      - name: Set the WEBSOCKET
+        run: |
+          echo 'WEBSOCKET<<EOF' >> $GITHUB_ENV
+          aws apigatewayv2 get-apis | jq .Items -r | jq -c '.[] | select(.Name | contains("websocket"))'.ApiEndpoint -r | sed -e "s/\$/\/dev/g" >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+      - name: Set the WEBSOCKET_URL
+        run: |   
+          echo 'WEBSOCKET_URL<<EOF' >> $GITHUB_ENV
+          aws apigatewayv2 get-apis | jq .Items -r | jq -c '.[] | select(.Name | contains("websocket"))'.ApiEndpoint -r | sed 's/\wss/https/g' | sed -e "s/\$/\/dev/g" >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+          
+      
+
+      - name: Use the value
+        id: step_five
+        run: |
+          echo "${{ env.ENDPOINT_URL }}" # This will output 'ENDPOINT_URL'
+          echo "${{ env.WEBSOCKET }}" # This will output 'WEBSOCKET'
+          echo "${{ env.WEBSOCKET_URL }}" # This will output 'WEBSOCKET_URL'
+
+      - name:  
+          serverless deploy
+        run: |
+          npm install -g serverless
+          npm install -g serverless-dotenv-plugin
+          serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          cp -r lambda/Websocket/* ./
+          npm install
+          ls -all
+          serverless deploy

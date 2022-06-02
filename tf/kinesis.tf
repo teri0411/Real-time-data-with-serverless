@@ -4,7 +4,7 @@ resource "aws_kinesis_stream" "location_stream" {
 
   shard_level_metrics = [
     "IncomingBytes",
-    "OutgoingBytes",
+    "OutgoingBytes",            
   ]
 
   stream_mode_details {
@@ -50,8 +50,8 @@ resource "aws_iam_role_policy" "firehose-opensearch" {
                 "s3:PutObject"
             ],
             "Resource": [
-                "arn:aws:s3:::project4test",
-                "arn:aws:s3:::project4test/*"
+                "arn:aws:s3:::location-backup-bucket",
+                "arn:aws:s3:::location-backup-bucket/*"
             ]
         },
         {
@@ -119,7 +119,7 @@ resource "aws_iam_role_policy" "firehose-opensearch" {
                     "kms:ViaService": "kinesis.ap-northeast-2.amazonaws.com"
                 },
                 "StringLike": {
-                    "kms:EncryptionContext:aws:kinesis:arn": "arn:aws:kinesis:ap-northeast-2:889058321615:stream/project4"
+                    "kms:EncryptionContext:aws:kinesis:arn": "arn:aws:kinesis:ap-northeast-2:889058321615:stream/location_stream"
                 }
             }
         }
@@ -161,8 +161,8 @@ resource "aws_kinesis_firehose_delivery_stream" "location-kinesis-firehose-es" {
 
   kinesis_source_configuration {
     kinesis_stream_arn = aws_kinesis_stream.location_stream.arn
-    role_arn           = aws_iam_role.firehose_role.arn
-  }
+    role_arn = aws_iam_role.firehose_role.arn
+  } 
 
   elasticsearch_configuration {
     domain_arn = aws_opensearch_domain.delivery_cluster.arn
@@ -176,11 +176,11 @@ resource "aws_kinesis_firehose_delivery_stream" "location-kinesis-firehose-es" {
     }
 
     cloudwatch_logging_options {
-      enabled         = true
-      log_group_name  = "/aws/kinesisfirehose/location-kinesis-firehose-es"
-      log_stream_name = "DestinationDelivery"
+      enabled = true
+      log_group_name = "/aws/kinesisfirehose/location-kinesis-firehose-es"
+      log_stream_name = "DestinationDelivery2"
     }
-
+    
   }
 }
 
@@ -205,44 +205,30 @@ resource "aws_kinesis_firehose_delivery_stream" "firehose-lambda" {
   s3_configuration {
     role_arn   = aws_iam_role.firehose_role.arn
     bucket_arn = aws_s3_bucket.location-backup-bucket.arn
-    # buffer_size        = 10
-    # buffer_interval    = 400
-    # compression_format = "GZIP"
   }
 
   kinesis_source_configuration {
     kinesis_stream_arn = aws_kinesis_stream.location_stream.arn
-    role_arn           = aws_iam_role.firehose_role.arn
-  }
+    role_arn = aws_iam_role.firehose_role.arn
+  } 
 
   http_endpoint_configuration {
-    url                = "https://kordiw5xouxg5ifex6gq5fnt7a0jvula.lambda-url.ap-northeast-2.on.aws/"
-    name               = "New Relic"
-    access_key         = "my-key"
-    buffering_size     = 15
-    buffering_interval = 600
+    url                = var.ENDPOINT_URL
+    name               = "http_endpoint"
+    buffering_size     = 5
+    buffering_interval = 60
     role_arn           = aws_iam_role.firehose_role.arn
     s3_backup_mode     = "FailedDataOnly"
 
-    # request_configuration {
-    #   content_encoding = "GZIP"
-
-    #   common_attributes {
-    #     name  = "testname"
-    #     value = "testvalue"
-    #   }
-
-    #   common_attributes {
-    #     name  = "testname2"
-    #     value = "testvalue2"
-    #   }
-    # }
+     request_configuration {
+       content_encoding = "NONE"
+     }
   }
 }
 
 resource "aws_iam_role_policy" "firehose-lambda" {
   name   = "opensearch"
-  role   = aws_iam_role.firehose_lambda_role.id
+  role   = aws_iam_role.firehose_role.id
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -254,7 +240,7 @@ resource "aws_iam_role_policy" "firehose-lambda" {
       ],
       "Resource": [
         "${aws_opensearch_domain.delivery_cluster.arn}",
-        "${aws_opensearch_domain.delivery_cluster.arn}/*"
+        "${aws_opensearch_domain.delivery_cluster.arn}*"
       ]
     },
     {
@@ -285,22 +271,16 @@ resource "aws_iam_role_policy" "firehose-lambda" {
 EOF
 }
 
-resource "aws_iam_role" "firehose_lambda_role" {
-  name = "firehose_lambda_role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "firehose.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
+resource "aws_cloudwatch_log_group" "firehose-lambda" {
+  name = "/aws/kinesisfirehose/firehose-lambda"
 }
-EOF
+
+resource "aws_cloudwatch_log_stream" "DestinationDelivery" {
+  name           = "DestinationDelivery"
+  log_group_name = aws_cloudwatch_log_group.firehose-lambda.name
+}
+
+resource "aws_cloudwatch_log_stream" "DestinationDelivery2" {
+  name           = "DestinationDelivery2"
+  log_group_name = aws_cloudwatch_log_group.location-kinesis-firehose-es.name
 }

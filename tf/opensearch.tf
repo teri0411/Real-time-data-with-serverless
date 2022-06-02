@@ -14,26 +14,27 @@ resource "aws_opensearch_domain" "delivery_cluster" {
 
   vpc_options {
     security_group_ids = [aws_security_group.es_sg.id]
-    subnet_ids         = [aws_subnet.twohundreadok-private-subnet.id]
+    subnet_ids         = [aws_subnet.twohundreadok-public-subnet.id]
   }
 
-  #   access_policies = <<CONFIG
-  # {
-  #     "Version": "2012-10-17",
-  #     "Statement": [
-  #         {
-  #             "Action": "es:*",
-  #             "Principal": "*",
-  #             "Effect": "Allow",
-  #             "Resource": "${aws_kinesis_firehose_delivery_stream.location-kinesis-firehose-es.arn}"
-  #         }
-  #     ]
-  # }
-  # CONFIG
+ # access_policies = <<CONFIG
+#{
+#    "Version": "2012-10-17",
+#    "Statement": [
+#        {
+#            "Action": "es:*",
+#            "Principal": "*",
+#            "Effect": "Allow",
+#            "Resource": "${aws_iam_role_policy.firehose-lambda.arn}"
+#        }
+#    ]
+#}
+#CONFIG
 
   tags = {
     Domain = "delivery"
   }
+
 }
 
 resource "aws_security_group" "es_sg" {
@@ -42,12 +43,14 @@ resource "aws_security_group" "es_sg" {
   vpc_id      = aws_vpc.twohundreadok-vpc.id
 
   ingress {
-    description = "TLS from VPC"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["${aws_vpc.twohundreadok-vpc.cidr_block}"]
+    description      = "TLS from VPC"
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = ["218.235.89.144/32"]
   }
+
+
 
   egress {
     from_port        = 0
@@ -61,4 +64,3 @@ resource "aws_security_group" "es_sg" {
     Name = "es_sg"
   }
 }
-

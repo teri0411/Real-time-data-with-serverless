@@ -4,7 +4,7 @@ provider:
   name: aws   
   runtime: nodejs14.x   
   region: ap-northeast-2 
-  profile: jang
+  # profile: jang
   iam:
     role:
       statements:

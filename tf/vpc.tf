@@ -54,6 +54,19 @@ resource "aws_internet_gateway" "twohundreadok-vpc-ig" {
   }
 }
 
+# resource "aws_nat_gateway" "twohundreadok-vpc-ng" {
+#   # allocation_id = aws_eip.iac-e-ip.id
+#   subnet_id     = aws_subnet.twohundreadok-private-subnet.id
+
+#   tags = {
+#     Name = "twohundreadok-vpc-ng"
+#   }
+
+#   # To ensure proper ordering, it is recommended to add an explicit dependency
+#   # on the Internet Gateway for the VPC.
+#   depends_on = [aws_internet_gateway.twohundreadok-vpc-ig]
+# }
+
 resource "aws_route_table" "twohundreadok-vpc-rt" {
   vpc_id = aws_vpc.twohundreadok-vpc.id
 
@@ -83,4 +96,36 @@ resource "aws_main_route_table_association" "a" {
 resource "aws_route_table_association" "private-1" {
   subnet_id      = aws_subnet.twohundreadok-private-subnet.id
   route_table_id = aws_route_table.twohundreadok-vpc-rt-private-1.id
+}
+
+resource "aws_route_table_association" "private-2" {
+  subnet_id      = aws_subnet.twohundreadok-private-subnet-2.id
+  route_table_id = aws_route_table.twohundreadok-vpc-rt-private-1.id
+}
+
+resource "aws_security_group" "lambda_sg" {
+  name        = "lambda_sg"
+  description = "Security Group for Lambda"
+  vpc_id      = aws_vpc.twohundreadok-vpc.id
+
+  ingress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = {
+    Name = "es_sg"
+  }
 }

@@ -24,15 +24,18 @@ service: websocket-app
 
 
 plugins:
-  - serverless-dynamodb-local
-  - serverless-plugin-existing-s3
-  - serverless-dotenv-plugin
   - serverless-webpack
+  - serverless-dotenv-plugin
+  - serverless-plugin-existing-s3
   - serverless-offline
+	
+useDotenv: true
+
 provider:
   name: aws
   region: ${opt:region, 'ap-northeast-2'}
   memorySize: 512
+  environment:
   role: LambdaRole
   iam:
     role: 'arn:aws:iam::889058321615:role/websocket'

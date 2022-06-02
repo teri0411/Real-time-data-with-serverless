@@ -1,6 +1,6 @@
 import dynamoDBClient from '../utils/dynamodb';
 import Client from './client';
-
+///
 
 class Topic {
   truckerId;
@@ -50,3 +50,6 @@ class Topic {
 }
 
 export default Topic;
+
+//???
+//???
