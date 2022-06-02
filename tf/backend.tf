@@ -5,6 +5,6 @@ terraform {
     region         = "ap-northeast-2"
     encrypt        = true
     dynamodb_table = "terraform-lock"
-    profile        = "default"
+    # profile        = "default"
   }
 }
