@@ -15,7 +15,11 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
-
+      - name: Create env file
+        run: |
+          touch .env
+          echo ENDPOINT_URL=https://qmtkjfmydopdc7irkapqeooc6a0yjnbz.lambda-url.ap-northeast-2.on.aws/ >> .env
+          cat .env
       - name: Set the value
         id: step_one
         run: |
