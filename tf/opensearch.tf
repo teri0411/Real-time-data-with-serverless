@@ -14,7 +14,7 @@ resource "aws_opensearch_domain" "delivery_cluster" {
 
   vpc_options {
     security_group_ids = [aws_security_group.es_sg.id]
-    subnet_ids         = [aws_subnet.twohundreadok-public-subnet.id]
+    subnet_ids         = [aws_subnet.twohundreadok-private-subnet.id]
   }
 
  # access_policies = <<CONFIG
@@ -44,13 +44,19 @@ resource "aws_security_group" "es_sg" {
 
   ingress {
     description      = "TLS from VPC"
-    from_port        = 80
-    to_port          = 80
+    from_port        = 443
+    to_port          = 443
     protocol         = "tcp"
-    cidr_blocks      = ["218.235.89.144/32"]
+    cidr_blocks      = [aws_vpc.twohundreadok-vpc.cidr_block]
   }
 
-
+  ingress {
+    description      = "TLS from lambda"
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+    security_groups  = [aws_security_group.lambda_sg.id]
+  }
 
   egress {
     from_port        = 0
