@@ -21,10 +21,10 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Copy Folder
       run: |
+        rm .
         cp -r lambda/sendLocation/* ./
         rm -rf lambda
         rm -rf tf
-        rm README.md
     - name: 
         serverless deploy
       run: |
