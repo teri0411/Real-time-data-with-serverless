@@ -40,7 +40,7 @@ jobs:
           echo ENDPOINT_URL= >> .env
           echo WEBSOCKET= >> .env
           echo WEBSOCKET_URL= >> .env
-          echo "ENDPOINT_URL= $aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r" >> .env
+          ENDPOINT_URL=echo 'aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r' >> .env
           cat .env
           cat .env >> $GITHUB_ENV
           echo "ENDPOINT_URL=$aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r" >> .env
