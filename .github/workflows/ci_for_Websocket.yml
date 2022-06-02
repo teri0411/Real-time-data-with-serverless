@@ -40,21 +40,15 @@ jobs:
           echo ENDPOINT_URL= >> .env
           echo WEBSOCKET= >> .env
           echo WEBSOCKET_URL= >> .env
-          echo ENDPOINT_URL='$aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r' >> .env
           cat .env
           cat .env >> $GITHUB_ENV
-          echo "ENDPOINT_URL=$aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r" >> .env
-          echo "WEBSOCKET=$aws apigatewayv2 get-apis | jq .Items -r | jq -c '.[] | select(.Name | contains("websocket"))'.ApiEndpoint -r | sed -e "s/\$/\/dev/g" >> .env
-          echo "WEBSOCKET_URL=$aws apigatewayv2 get-apis | jq .Items -r | jq -c '.[] | select(.Name | contains("websocket"))'.ApiEndpoint -r | sed 's/\wss/https/g' | sed -e "s/\$/\/dev/gL" >> .env
+
  
-
-          
-      # - name: Set the ENDPOINT_URL
-      #   run: |
-      #     echo 'ENDPOINT_URL<<EOF' >> .env
-      #     echo 'aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r' >> .env
-      #     cat .env
-
+      - name: Set the ENDPOINT_URL
+        run: |
+          echo 'ENDPOINT_URL'<<EOF >> $GITHUB_ENV
+          aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
 
       # - name: Set the WEBSOCKET
       #   run: |          
