@@ -52,9 +52,9 @@ resource "aws_security_group" "es_sg" {
 
   ingress {
     description      = "TLS from lambda"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
     security_groups  = [aws_security_group.lambda_sg.id]
   }
 
