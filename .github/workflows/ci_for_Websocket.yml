@@ -35,6 +35,8 @@ jobs:
           aws-region: ap-northeast-2
      
       - name: Create env file
+        uses: actions/checkout@v3
+        id: step_one
         run: |
           touch .env
           echo ENDPOINT_URL= >> .env
@@ -44,16 +46,22 @@ jobs:
           cat .env >> $GITHUB_ENV
           
       - name: Set the ENDPOINT_URL
+        uses: actions/checkout@v3
+        id: step_two
         run: |
           echo 'ENDPOINT_URL<<EOF' >> $GITHUB_ENV
           aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       - name: Set the WEBSOCKET
+        uses: actions/checkout@v3
+        id: step_three
         run: |          
           echo 'WEBSOCKET<<EOF' >> $GITHUB_ENV
           aws apigatewayv2 get-apis | jq .Items -r | jq -c '.[] | select(.Name | contains("websocket"))'.ApiEndpoint -r | sed -e "s/\$/\/dev/g" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       - name: Set the WEBSOCKET_URL
+        uses: actions/checkout@v3
+        id: step_four
         run: |   
           echo 'WEBSOCKET_URL<<EOF' >> $GITHUB_ENV
           aws apigatewayv2 get-apis | jq .Items -r | jq -c '.[] | select(.Name | contains("websocket"))'.ApiEndpoint -r | sed 's/\wss/https/g' | sed -e "s/\$/\/dev/g" >> $GITHUB_ENV
@@ -62,6 +70,8 @@ jobs:
       
 
       - name: Use the value
+        uses: actions/checkout@v3
+        id: step_five
         run: |
           echo "${{ env.ENDPOINT_URL }}" # This will output 'ENDPOINT_URL'
           echo "${{ env.WEBSOCKET }}" # This will output 'WEBSOCKET'
