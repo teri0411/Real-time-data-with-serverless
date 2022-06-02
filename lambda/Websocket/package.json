@@ -33,6 +33,7 @@
   "license": "ISC",
   "dependencies": {
     "@babel/runtime": "^7.15.4",
-    "aws-sdk": "2.636.0"
+    "aws-sdk": "2.636.0",
+    "dataformat": "^1.0.0"
   }
 }

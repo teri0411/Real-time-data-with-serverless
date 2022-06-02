@@ -22,12 +22,14 @@ export const options = {
 };
 
 
+var nowDate = new Date();
+
 export default function () {
   // our HTTP request, note that we are saving the response to res, which can be accessed later
   const payload = {"input":1};
   const getRandom = Math.random() * (100 - 1) + 1;
   
-  const driverData =  {"truckerId": "588866", "@timestamp_utc": "2022-05-17T08:02:55.567Z", "location": {"lat": getRandom ,"lon": getRandom}};
+  const driverData =  {"truckerId": "588866", "@timestamp_utc": nowDate, "location": {"lat": getRandom ,"lon": getRandom}};
   const headers = {
     'Content-Type': 'application/json',
     'dataType': 'json'
