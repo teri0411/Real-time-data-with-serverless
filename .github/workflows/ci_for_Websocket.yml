@@ -37,8 +37,8 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo aws-access-key-id=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env
-          echo aws-secret-access-key=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env
+          echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env
+          echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env
           echo TOPICS_TABLE=connection >> .env
           echo ENDPOINT_URL= >> .env
           echo WEBSOCKET= >> .env
