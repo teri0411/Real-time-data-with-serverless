@@ -19,16 +19,16 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Copy Folder
+    - name: Delete Files
       continue-on-error: true
       run: |
         rm *
-        cp -r lambda/sendLocation/* ./
-        rm -rf lambda
-        rm -rf tf
     - name: 
         serverless deploy
       run: |
+        cp -r lambda/sendLocation/* ./
+        rm -rf lambda
+        rm -rf tf
         npm install -g serverless
         rm .gitignore
         serverless create --template aws-python3
