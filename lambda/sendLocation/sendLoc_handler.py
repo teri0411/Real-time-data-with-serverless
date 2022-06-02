@@ -1,7 +1,8 @@
 import json
 import boto3
 import os
-##
+
+#####
 def sendLoc(event, context):
     kinesis_client = boto3.client('kinesis')
     body = json.loads(event['body'])
