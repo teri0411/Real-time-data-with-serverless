@@ -45,10 +45,10 @@ jobs:
           
       - name: Set the ENDPOINT_URL
         run: |
-          # aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r >> .env
-          echo 'ENDPOINT_URL=$(aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r)' >> .env
-          cat .env
-          cat .env >> $GITHUB_ENV
+          echo 'ENDPOINT_URL<<EOF' >> .env
+          aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r >> .env
+          cat 'EOF'
+          cat 'EOF' >> $GITHUB_ENV
 
       # - name: Set the WEBSOCKET
       #   run: |          
