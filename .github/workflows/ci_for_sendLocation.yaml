@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - develop
-    paths: ['lambda/sendLocation/**']
+    paths: ['lambda/sendLocation/**', '.github/workflows/ci_for_sendLocation.yaml']
 
 jobs:
   deploy:
