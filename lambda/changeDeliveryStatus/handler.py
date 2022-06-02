@@ -32,13 +32,12 @@ def changeStatus(status, id):
     print(2)
     if status == 0:
         document = {"id": id, "status": "start"}
-        response = search.index(index="status", doc_type="_doc", id=id, body=document)
-        # response = requests.put()
+        response = search.index(index="status", id=id, body=document)
         print(response)
         return response
     elif status == 1:
         document = {"id": id, "status": "end"}
-        response = search.index(index="status", doc_type="_doc", id=id, body=document)
+        response = search.index(index="status", id=id, body=document)
         print(response)
         return response
 
@@ -47,7 +46,7 @@ def start(event, context):
     id = event['body']
     id = json.loads(id)['id']
     print(id)
-    # publishSNS(str(message)) #{"statusCode": 200, "body": message}
+    publishSNS(str(message)) #{"statusCode": 200, "body": message}
     print(event)
     response = changeStatus(0, id)
     return response
@@ -56,6 +55,6 @@ def end(event, context):
     message = {"message": "end delivery"}
     id = event['body']
     id = json.loads(id)['id']
-    # response = publishSNS(str(message))
+    response = publishSNS(str(message))
     response = changeStatus(1, id)
     return response

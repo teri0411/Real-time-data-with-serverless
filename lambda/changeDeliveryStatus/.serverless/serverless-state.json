@@ -234,7 +234,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/ChangeDeliveryStatus/dev/1654155786401-2022-06-02T07:43:06.401Z/ChangeDeliveryStatus.zip"
+                "S3Key": "serverless/ChangeDeliveryStatus/dev/1654157236745-2022-06-02T08:07:16.745Z/ChangeDeliveryStatus.zip"
               },
               "Handler": "handler.start",
               "Runtime": "python3.7",
@@ -273,7 +273,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/ChangeDeliveryStatus/dev/1654155786401-2022-06-02T07:43:06.401Z/ChangeDeliveryStatus.zip"
+                "S3Key": "serverless/ChangeDeliveryStatus/dev/1654157236745-2022-06-02T08:07:16.745Z/ChangeDeliveryStatus.zip"
               },
               "Handler": "handler.end",
               "Runtime": "python3.7",
@@ -305,24 +305,24 @@
               "EndDeliveryLogGroup"
             ]
           },
-          "StartDeliveryLambdaVersionShTXPDkPjQOJAz0EnIBlpQVvX4hRKTB2QYI6xb9omM": {
+          "StartDeliveryLambdaVersionH42bKsobxOQ73HmO1Ami9gfluckq7UWpe4257Q8Z8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "StartDeliveryLambdaFunction"
               },
-              "CodeSha256": "i5ynHVImmab9s3UMp0tUtXi4Oq7vPsEphvi8FCapHuo="
+              "CodeSha256": "ii785E316XfWnBdCVl59UDInFPe+8sl2Dhju7rcec84="
             }
           },
-          "EndDeliveryLambdaVersiond88Yt6TauOsctV2LKvucttdtAcSu9PkjAuWP0fb2Xw": {
+          "EndDeliveryLambdaVersion9RBZmtiDaNUiPdyXPK3UF36eGtje63rlvukUuv8AUQ": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "EndDeliveryLambdaFunction"
               },
-              "CodeSha256": "i5ynHVImmab9s3UMp0tUtXi4Oq7vPsEphvi8FCapHuo="
+              "CodeSha256": "ii785E316XfWnBdCVl59UDInFPe+8sl2Dhju7rcec84="
             }
           },
           "HttpApi": {
@@ -502,7 +502,7 @@
           "StartDeliveryLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "StartDeliveryLambdaVersionShTXPDkPjQOJAz0EnIBlpQVvX4hRKTB2QYI6xb9omM"
+              "Ref": "StartDeliveryLambdaVersionH42bKsobxOQ73HmO1Ami9gfluckq7UWpe4257Q8Z8"
             },
             "Export": {
               "Name": "sls-ChangeDeliveryStatus-dev-StartDeliveryLambdaFunctionQualifiedArn"
@@ -511,7 +511,7 @@
           "EndDeliveryLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "EndDeliveryLambdaVersiond88Yt6TauOsctV2LKvucttdtAcSu9PkjAuWP0fb2Xw"
+              "Ref": "EndDeliveryLambdaVersion9RBZmtiDaNUiPdyXPK3UF36eGtje63rlvukUuv8AUQ"
             },
             "Export": {
               "Name": "sls-ChangeDeliveryStatus-dev-EndDeliveryLambdaFunctionQualifiedArn"
@@ -665,7 +665,7 @@
         "timeout": 6,
         "runtime": "python3.7",
         "vpc": {},
-        "versionLogicalId": "StartDeliveryLambdaVersionShTXPDkPjQOJAz0EnIBlpQVvX4hRKTB2QYI6xb9omM"
+        "versionLogicalId": "StartDeliveryLambdaVersionH42bKsobxOQ73HmO1Ami9gfluckq7UWpe4257Q8Z8"
       },
       "endDelivery": {
         "handler": "handler.end",
@@ -685,7 +685,7 @@
         "timeout": 6,
         "runtime": "python3.7",
         "vpc": {},
-        "versionLogicalId": "EndDeliveryLambdaVersiond88Yt6TauOsctV2LKvucttdtAcSu9PkjAuWP0fb2Xw"
+        "versionLogicalId": "EndDeliveryLambdaVersion9RBZmtiDaNUiPdyXPK3UF36eGtje63rlvukUuv8AUQ"
       }
     },
     "configValidationMode": "warn",
@@ -711,7 +711,7 @@
     "artifact": "/home/devops/devops-01-final-TeamC-Scenario-02/lambda/changeDeliveryStatus/.serverless/ChangeDeliveryStatus.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/ChangeDeliveryStatus/dev/1654155786401-2022-06-02T07:43:06.401Z",
+    "artifactDirectoryName": "serverless/ChangeDeliveryStatus/dev/1654157236745-2022-06-02T08:07:16.745Z",
     "artifact": "ChangeDeliveryStatus.zip"
   }
 }
