@@ -48,6 +48,7 @@ def start(event, context):
     id = event['body']
     id = json.loads(id)['id']
     publishSNS(str(message)) #{"statusCode": 200, "body": message}
+    print(event)
     response = changeStatus(0, id)
     return response
 
