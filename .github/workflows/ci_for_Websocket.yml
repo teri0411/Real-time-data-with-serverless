@@ -43,16 +43,24 @@ jobs:
           cat .env
           cat .env >> $GITHUB_ENV
           
-      - name: Set the value
+      - name: Set the ENDPOINT_URL
         id: step_one
         run: |
-          # echo 'ENDPOINT_URL<<EOF' >> $GITHUB_ENV
+          echo 'ENDPOINT_URL<<EOF' >> $GITHUB_ENV
           aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r >> $GITHUB_ENV
-          # echo 'WEBSOCKET<<EOF' >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - name: Set the WEBSOCKET
+        id: step_one
+        run: |          
+          echo 'WEBSOCKET<<EOF' >> $GITHUB_ENV
           aws apigatewayv2 get-apis | jq .Items -r | jq -c '.[] | select(.Name | contains("websocket"))'.ApiEndpoint -r | sed -e "s/\$/\/dev/g" >> $GITHUB_ENV
-          # echo 'WEBSOCKET_URL' >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - name: Set the WEBSOCKET_URL
+        id: step_one
+        run: |   
+          echo 'WEBSOCKET_URL<<EOF' >> $GITHUB_ENV
           aws apigatewayv2 get-apis | jq .Items -r | jq -c '.[] | select(.Name | contains("websocket"))'.ApiEndpoint -r | sed 's/\wss/https/g' | sed -e "s/\$/\/dev/g" >> $GITHUB_ENV
-          cat .env
+          echo 'EOF' >> $GITHUB_ENV
           
       
 
