@@ -58,6 +58,14 @@ resource "aws_security_group" "es_sg" {
     cidr_blocks      = ["218.235.89.144/32"]
   }
 
+  ingress {
+    description      = "TLS from VPC"
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+    cidr_blocks      = ["218.235.89.144/32"]
+  }
+
   egress {
     from_port        = 0
     to_port          = 0
