@@ -18,7 +18,7 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo ENDPOINT_URL=${aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r} >> .env
+          echo "ENDPOINT_URL=$aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r" >> .env
           cat .env >> $GITHUB_ENV
 
       - name: Set the value
