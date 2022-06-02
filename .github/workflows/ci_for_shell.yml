@@ -16,6 +16,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
+
       - uses: actions/checkout@v1
       - name: script
         run: |
