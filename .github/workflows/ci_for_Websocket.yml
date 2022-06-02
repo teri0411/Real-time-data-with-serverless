@@ -62,6 +62,13 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-2
+          
+      - name: Use the value
+        id: step_two
+        run: |
+          echo "${{ env.ENDPOINT_URL }}"
+          echo "${{ env.WEBSOCKET }}"
+          echo "${{ env.WEBSOCKET_URL }}"
 
       - name:  
           serverless deploy
