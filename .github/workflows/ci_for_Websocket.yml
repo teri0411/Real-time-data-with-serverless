@@ -48,11 +48,14 @@ jobs:
         run: |
           echo 'ENDPOINT_URL<<EOF' >> $GITHUB_ENV
           aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r >> $GITHUB_ENV
-          echo 'WEBSOCKET<<EOF' >> $GITHUB_ENV
+          echo 'WEBSOCKET<<EOF2' >> $GITHUB_ENV
           aws apigatewayv2 get-apis | jq .Items -r | jq -c '.[] | select(.Name | contains("websocket"))'.ApiEndpoint -r | sed -e "s/\$/\/dev/g" >> $GITHUB_ENV
-          echo 'WEBSOCKET_URL<<EOF' >> $GITHUB_ENV
+          echo 'WEBSOCKET_URL<<EO3F' >> $GITHUB_ENV
           aws apigatewayv2 get-apis | jq .Items -r | jq -c '.[] | select(.Name | contains("websocket"))'.ApiEndpoint -r | sed 's/\wss/https/g' | sed -e "s/\$/\/dev/g" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
+          echo 'EOF2' >> $GITHUB_ENV
+          echo 'EOF3' >> $GITHUB_ENV
+          
       
 
       - name: Use the value
