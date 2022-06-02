@@ -15,5 +15,5 @@ sls deploy
 cd .. && cd ..
 cd tf
 
-terraform apply -lock=false -var ENDPOINT_URL=$ENDPOINT_URL
+terraform apply -var ENDPOINT_URL=$ENDPOINT_URL
 cd ..
