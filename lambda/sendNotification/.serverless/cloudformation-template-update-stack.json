@@ -139,7 +139,9 @@
                   "Action": [
                     "sns:Publish"
                   ],
-                  "Resource": "arn:aws:sns:ap-northeast-2:889058321615:NotificationSend"
+                  "Resource": [
+                    "ssm:/200OK/SNS/NotificationSend"
+                  ]
                 },
                 {
                   "Effect": "Allow",
@@ -184,7 +186,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sendNotification/dev/1654145350377-2022-06-02T04:49:10.377Z/sendNotification.zip"
+          "S3Key": "serverless/sendNotification/dev/1654161189325-2022-06-02T09:13:09.325Z/sendNotification.zip"
         },
         "Handler": "handler.hello",
         "Runtime": "nodejs14.x",
@@ -193,7 +195,7 @@
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "SNS_TOPIC": "arn:aws:sns:ap-northeast-2:889058321615:NotificationSend"
+            "SNS_TOPIC": "ssm:/200OK/SNS/NotificationSend"
           }
         },
         "Role": {
@@ -207,14 +209,14 @@
         "HelloLogGroup"
       ]
     },
-    "HelloLambdaVersionUZ6G98lRnOK5NtCnmBBtmOWIY0pnNdwneDlbcAiYZI": {
+    "HelloLambdaVersionsK0zPeJXxwX3lkRI9vDb2F7NDFOtTtNgjQPD9sukE": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "HelloLambdaFunction"
         },
-        "CodeSha256": "0MAGbs2+bFwqOrjfl9pXIwgb7ksAU6wmWfYcWacC9GQ="
+        "CodeSha256": "62Mty+OisADdWv4Hf/qxsmM3wvJFiyqNNgeW0/y+EZA="
       }
     },
     "HelloEventSourceMappingSQSSendNotification": {
@@ -255,7 +257,7 @@
             "Arn"
           ]
         },
-        "TopicArn": "arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatusChange"
+        "TopicArn": "ssm:/200OK/SNS/DeliveryStatus"
       }
     }
   },
@@ -271,7 +273,7 @@
     "HelloLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "HelloLambdaVersionUZ6G98lRnOK5NtCnmBBtmOWIY0pnNdwneDlbcAiYZI"
+        "Ref": "HelloLambdaVersionsK0zPeJXxwX3lkRI9vDb2F7NDFOtTtNgjQPD9sukE"
       },
       "Export": {
         "Name": "sls-sendNotification-dev-HelloLambdaFunctionQualifiedArn"
