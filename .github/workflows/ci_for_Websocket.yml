@@ -47,8 +47,8 @@ jobs:
         run: |
           echo 'ENDPOINT_URL<<EOF' >> .env
           aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r >> .env
-          cat 'EOF'
-          cat 'EOF' >> $GITHUB_ENV
+          echo 'EOF'
+          echo 'EOF' >> .env
 
       # - name: Set the WEBSOCKET
       #   run: |          
