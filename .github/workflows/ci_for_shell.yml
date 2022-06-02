@@ -22,9 +22,7 @@ jobs:
         run: |
           chmod +x ./action.sh
           source action.sh
-          echo 'ENDPOINT_URL<<EOF' >> $GITHUB_ENV
-          aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          echo 'aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r' >> $GITHUB_ENV
 
         shell: bash
 
