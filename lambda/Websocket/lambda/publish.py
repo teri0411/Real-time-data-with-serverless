@@ -5,7 +5,7 @@ import boto3
 import os
 from boto3.dynamodb.conditions import Key
 import botocore
-
+import msgpack
 
 def lambda_handler(event, context):
 
@@ -90,10 +90,22 @@ def lambda_handler(event, context):
   response = requests.get(os.environ['WEBSOCKET_URL'])
   print("-----response")
   print(response)
-  return {
-    'statusCode': 200,
-    'body': json.dumps("hello, publish message server here.")
+
+  output = []
+
+  for record in event['records']:
+    payload = msgpack.unpackb(base64.b64decode(record['data']), raw=False)
+
+    # Do custom processing on the payload here
+    output_record = {
+       'recordId': record['recordId'],
+       'result': 'Ok',
+       'data': base64.b64encode(json.dumps(payload).encode('utf-8') + b'\n').decode('utf-8')
     }
+    output.append(output_record)
+  print('Successfully processed {} records.'.format(len(event['records'])))
+  return {'records': output}
+
 
       # catch      
         # except botocore.exceptions.ClientError as e:
