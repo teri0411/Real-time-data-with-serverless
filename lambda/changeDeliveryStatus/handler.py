@@ -2,7 +2,6 @@ import json
 import boto3
 from opensearchpy import OpenSearch, RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
-import requests
 import os
 
 def publishSNS(message):
@@ -41,14 +40,14 @@ def start(event, context):
     message = {"message": "start delivery"}
     id = event['body']
     id = json.loads(id)['id']
-    publishSNS(str(message)) #{"statusCode": 200, "body": message}
+    reponseSNS = publishSNS(str(message))
     response = changeStatus(0, id)
-    return response
+    return reponseSNS
 
 def end(event, context):
     message = {"message": "end delivery"}
     id = event['body']
     id = json.loads(id)['id']
-    response = publishSNS(str(message))
+    responseSNS = publishSNS(str(message))
     response = changeStatus(1, id)
-    return response
+    return responseSNS
