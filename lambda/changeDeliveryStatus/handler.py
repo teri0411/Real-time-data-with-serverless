@@ -14,7 +14,7 @@ def publishSNS(message):
     print(response)
     return response
     
-def changeStatus(status, id):
+def changeStatus(event, context):
     URL = os.environ['OPENSEARCH_ENDPOINT'] # + ':9200'
     region = "ap-northeast-2"
     service = 'es'
@@ -27,6 +27,8 @@ def changeStatus(status, id):
         verify_certs = True,
         connection_class = RequestsHttpConnection
     )
+    status = 0
+    id = 1
     if status == 0:
         document = {"id": id, "status": "start"}
         response = search.index(index="status", id=id, body=document)
@@ -41,7 +43,7 @@ def start(event, context):
     id = event['body']
     id = json.loads(id)['id']
     reponseSNS = publishSNS(str(message))
-    response = changeStatus(0, id)
+    # response = changeStatus(0, id)
     return reponseSNS
 
 def end(event, context):
@@ -49,5 +51,5 @@ def end(event, context):
     id = event['body']
     id = json.loads(id)['id']
     responseSNS = publishSNS(str(message))
-    response = changeStatus(1, id)
+    # response = changeStatus(1, id)
     return responseSNS
