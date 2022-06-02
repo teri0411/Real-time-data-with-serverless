@@ -29,7 +29,7 @@ jobs:
       run: |
         npm install -g serverless
         serverless create --template aws-python3
-        serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        serverless config credentials --provider aws --key ${{ secrets.aws_access_key_id }} --secret ${{ secrets.aws_secret_key_id }}
         serverless plugin install -n serverless-python-requirements
         rm serverless.yml
         rm handler.py

@@ -30,15 +30,15 @@ jobs:
       - name: Configure AWS credentials from Test account
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.aws_access_key_id }}
+          aws-secret-access-key: ${{ secrets.aws_secret_key_id }}
           aws-region: ap-northeast-2
      
       - name: Create env file
         run: |
           touch .env
-          echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env
-          echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env
+          echo aws_access_key_id=${{ secrets.aws_access_key_id }} >> .env
+          echo aws_secret_key_id=${{ secrets.aws_secret_key_id }} >> .env
           echo TOPICS_TABLE=connection >> .env
           echo ENDPOINT_URL= >> .env
           echo WEBSOCKET= >> .env
@@ -79,7 +79,7 @@ jobs:
         run: |
           npm install -g serverless
           npm install -g serverless-dotenv-plugin
-          serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          serverless config credentials --provider aws --key ${{ secrets.aws_access_key_id }} --secret ${{ secrets.aws_secret_key_id }}
           cp -r lambda/Websocket/* ./
           npm install
           ls -all

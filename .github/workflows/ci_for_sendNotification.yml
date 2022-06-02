@@ -30,7 +30,7 @@ jobs:
           serverless deploy
         run: |
           npm install -g serverless
-          serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          serverless config credentials --provider aws --key ${{ secrets.aws_access_key_id }} --secret ${{ secrets.secrets.aws_secret_key_id }}
           cp -r lambda/sendNotification/* ./
           npm install
           rm -rf lambda
