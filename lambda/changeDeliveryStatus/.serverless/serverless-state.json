@@ -6,8 +6,16 @@
     },
     "provider": {
       "name": "aws",
-      "runtime": "python3.8",
+      "runtime": "python3.7",
       "region": "ap-northeast-2",
+      "vpc": {
+        "securityGroupIds": [
+          "sg-0efd0305b11c2c102"
+        ],
+        "subnetIds": [
+          "subnet-0279ce18e30904d29"
+        ]
+      },
       "iam": {
         "role": {
           "statements": [
@@ -16,13 +24,24 @@
               "Action": [
                 "sns:Publish"
               ],
-              "Resource": "arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatus"
+              "Resource": "arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatusChange"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "es:*"
+              ],
+              "Resource": [
+                "arn:aws:es:ap-northeast-2:889058321615:domain/delivery",
+                "arn:aws:es:ap-northeast-2:889058321615:domain/delivery/*"
+              ]
             }
           ]
         }
       },
       "environment": {
-        "SNS_TOPIC": "arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatus"
+        "SNS_TOPIC": "arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatusChange",
+        "OPENSEARCH_ENDPOINT": "vpc-delivery-lf3bfa3tavqdv2mdyr6ufnabkq.ap-northeast-2.es.amazonaws.com"
       },
       "stage": "dev",
       "versionFunctions": true,
@@ -170,6 +189,9 @@
                       },
                       {
                         "$ref": "$[\"service\"][\"provider\"][\"iam\"][\"role\"][\"statements\"][0]"
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iam\"][\"role\"][\"statements\"][1]"
                       }
                     ]
                   }
@@ -188,7 +210,21 @@
                     "lambdaRole"
                   ]
                 ]
-              }
+              },
+              "ManagedPolicyArns": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+                    ]
+                  ]
+                }
+              ]
             }
           },
           "StartDeliveryLambdaFunction": {
@@ -198,16 +234,17 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/ChangeDeliveryStatus/dev/1653890290540-2022-05-30T05:58:10.540Z/ChangeDeliveryStatus.zip"
+                "S3Key": "serverless/ChangeDeliveryStatus/dev/1654151109589-2022-06-02T06:25:09.589Z/ChangeDeliveryStatus.zip"
               },
               "Handler": "handler.start",
-              "Runtime": "python3.8",
+              "Runtime": "python3.7",
               "FunctionName": "ChangeDeliveryStatus-dev-startDelivery",
               "MemorySize": 1024,
               "Timeout": 6,
               "Environment": {
                 "Variables": {
-                  "SNS_TOPIC": "arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatus"
+                  "SNS_TOPIC": "arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatusChange",
+                  "OPENSEARCH_ENDPOINT": "vpc-delivery-lf3bfa3tavqdv2mdyr6ufnabkq.ap-northeast-2.es.amazonaws.com"
                 }
               },
               "Role": {
@@ -215,6 +252,14 @@
                   "IamRoleLambdaExecution",
                   "Arn"
                 ]
+              },
+              "VpcConfig": {
+                "SecurityGroupIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"securityGroupIds\"]"
+                },
+                "SubnetIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"subnetIds\"]"
+                }
               }
             },
             "DependsOn": [
@@ -228,16 +273,17 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/ChangeDeliveryStatus/dev/1653890290540-2022-05-30T05:58:10.540Z/ChangeDeliveryStatus.zip"
+                "S3Key": "serverless/ChangeDeliveryStatus/dev/1654151109589-2022-06-02T06:25:09.589Z/ChangeDeliveryStatus.zip"
               },
               "Handler": "handler.end",
-              "Runtime": "python3.8",
+              "Runtime": "python3.7",
               "FunctionName": "ChangeDeliveryStatus-dev-endDelivery",
               "MemorySize": 1024,
               "Timeout": 6,
               "Environment": {
                 "Variables": {
-                  "SNS_TOPIC": "arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatus"
+                  "SNS_TOPIC": "arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatusChange",
+                  "OPENSEARCH_ENDPOINT": "vpc-delivery-lf3bfa3tavqdv2mdyr6ufnabkq.ap-northeast-2.es.amazonaws.com"
                 }
               },
               "Role": {
@@ -245,30 +291,38 @@
                   "IamRoleLambdaExecution",
                   "Arn"
                 ]
+              },
+              "VpcConfig": {
+                "SecurityGroupIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"securityGroupIds\"]"
+                },
+                "SubnetIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"subnetIds\"]"
+                }
               }
             },
             "DependsOn": [
               "EndDeliveryLogGroup"
             ]
           },
-          "StartDeliveryLambdaVersion81Ne04Jsf0Xo04LMfvuvBDhN2VrK630pGMlGBePk": {
+          "StartDeliveryLambdaVersionggp8HjUY25krsp6LKCEH9CzTs4PvyOR3XnnsHccmE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "StartDeliveryLambdaFunction"
               },
-              "CodeSha256": "lNXvpiyqPoV28bIezHJSpwnZa0VyrcVvVWD7DIaZlfY="
+              "CodeSha256": "IpzkLlVoAHueAQj1UwpGt6hZ6C43T4w6R2p4bbX6SCM="
             }
           },
-          "EndDeliveryLambdaVersionkWRSVWJyKxJDmpX8twmlmPwAKuhz8mygGV8oXuewf0": {
+          "EndDeliveryLambdaVersion4IjngRdr5bKFy8PeYzEFs0QaEP5vUbLK6Vga7RquzrY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "EndDeliveryLambdaFunction"
               },
-              "CodeSha256": "lNXvpiyqPoV28bIezHJSpwnZa0VyrcVvVWD7DIaZlfY="
+              "CodeSha256": "IpzkLlVoAHueAQj1UwpGt6hZ6C43T4w6R2p4bbX6SCM="
             }
           },
           "HttpApi": {
@@ -342,13 +396,13 @@
               "TimeoutInMillis": 6500
             }
           },
-          "HttpApiRouteGetStart": {
+          "HttpApiRoutePostStart": {
             "Type": "AWS::ApiGatewayV2::Route",
             "Properties": {
               "ApiId": {
                 "Ref": "HttpApi"
               },
-              "RouteKey": "GET /start",
+              "RouteKey": "POST /start",
               "Target": {
                 "Fn::Join": [
                   "/",
@@ -414,13 +468,13 @@
               "TimeoutInMillis": 6500
             }
           },
-          "HttpApiRouteGetEnd": {
+          "HttpApiRoutePostEnd": {
             "Type": "AWS::ApiGatewayV2::Route",
             "Properties": {
               "ApiId": {
                 "Ref": "HttpApi"
               },
-              "RouteKey": "GET /end",
+              "RouteKey": "POST /end",
               "Target": {
                 "Fn::Join": [
                   "/",
@@ -448,7 +502,7 @@
           "StartDeliveryLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "StartDeliveryLambdaVersion81Ne04Jsf0Xo04LMfvuvBDhN2VrK630pGMlGBePk"
+              "Ref": "StartDeliveryLambdaVersionggp8HjUY25krsp6LKCEH9CzTs4PvyOR3XnnsHccmE"
             },
             "Export": {
               "Name": "sls-ChangeDeliveryStatus-dev-StartDeliveryLambdaFunctionQualifiedArn"
@@ -457,7 +511,7 @@
           "EndDeliveryLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "EndDeliveryLambdaVersionkWRSVWJyKxJDmpX8twmlmPwAKuhz8mygGV8oXuewf0"
+              "Ref": "EndDeliveryLambdaVersion4IjngRdr5bKFy8PeYzEFs0QaEP5vUbLK6Vga7RquzrY"
             },
             "Export": {
               "Name": "sls-ChangeDeliveryStatus-dev-EndDeliveryLambdaFunctionQualifiedArn"
@@ -580,12 +634,12 @@
             }
           }
         }
-      },
-      "vpc": {}
+      }
     },
     "custom": {
       "pythonRequirements": {
-        "dockerizePip": true
+        "dockerizePip": true,
+        "fileName": "requirements.txt"
       }
     },
     "plugins": [
@@ -599,9 +653,9 @@
           {
             "httpApi": {
               "path": "/start",
-              "method": "get"
+              "method": "post"
             },
-            "resolvedMethod": "GET",
+            "resolvedMethod": "POST",
             "resolvedPath": "/start"
           }
         ],
@@ -609,9 +663,9 @@
         "package": {},
         "memory": 1024,
         "timeout": 6,
-        "runtime": "python3.8",
+        "runtime": "python3.7",
         "vpc": {},
-        "versionLogicalId": "StartDeliveryLambdaVersion81Ne04Jsf0Xo04LMfvuvBDhN2VrK630pGMlGBePk"
+        "versionLogicalId": "StartDeliveryLambdaVersionggp8HjUY25krsp6LKCEH9CzTs4PvyOR3XnnsHccmE"
       },
       "endDelivery": {
         "handler": "handler.end",
@@ -619,9 +673,9 @@
           {
             "httpApi": {
               "path": "/end",
-              "method": "get"
+              "method": "post"
             },
-            "resolvedMethod": "GET",
+            "resolvedMethod": "POST",
             "resolvedPath": "/end"
           }
         ],
@@ -629,9 +683,9 @@
         "package": {},
         "memory": 1024,
         "timeout": 6,
-        "runtime": "python3.8",
+        "runtime": "python3.7",
         "vpc": {},
-        "versionLogicalId": "EndDeliveryLambdaVersionkWRSVWJyKxJDmpX8twmlmPwAKuhz8mygGV8oXuewf0"
+        "versionLogicalId": "EndDeliveryLambdaVersion4IjngRdr5bKFy8PeYzEFs0QaEP5vUbLK6Vga7RquzrY"
       }
     },
     "configValidationMode": "warn",
@@ -657,7 +711,7 @@
     "artifact": "/home/devops/devops-01-final-TeamC-Scenario-02/lambda/changeDeliveryStatus/.serverless/ChangeDeliveryStatus.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/ChangeDeliveryStatus/dev/1653890290540-2022-05-30T05:58:10.540Z",
+    "artifactDirectoryName": "serverless/ChangeDeliveryStatus/dev/1654151109589-2022-06-02T06:25:09.589Z",
     "artifact": "ChangeDeliveryStatus.zip"
   }
 }
