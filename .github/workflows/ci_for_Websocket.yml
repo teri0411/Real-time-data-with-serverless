@@ -31,14 +31,14 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
      
       - name: Create env file
         run: |
           touch .env
           echo aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env
-          echo aws_secret_key_id=${{ secrets.AWS_SECRET_KEY_ID }} >> .env
+          echo aws_secret_key_id=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env
           echo TOPICS_TABLE=connection >> .env
           echo ENDPOINT_URL= >> .env
           echo WEBSOCKET= >> .env
@@ -79,7 +79,7 @@ jobs:
         run: |
           npm install -g serverless
           npm install -g serverless-dotenv-plugin
-          serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_KEY_ID }}
+          serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           cp -r lambda/Websocket/* ./
           npm install
           ls -all
