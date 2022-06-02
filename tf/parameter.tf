@@ -31,3 +31,17 @@ resource "aws_ssm_parameter" "sns_NotificationSend" {
   value = aws_sns_topic.NotificationSend.arn
   overwrite = true
 }
+
+resource "aws_ssm_parameter" "securityGroup_id" {
+  name = "/200OK/Security_Group/ID"
+  type = "String"
+  value = aws_security_group.es_sg.id
+  overwrite = true
+}
+
+resource "aws_ssm_parameter" "subnet_id" {
+  name = "/200OK/subnet/ID"
+  type = "String"
+  value = aws_subnet.twohundreadok-public-subnet.id
+  overwrite = true
+}
