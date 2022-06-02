@@ -90,9 +90,9 @@ def lambda_handler(event, context):
   print("-----response")
   print(response)
 
-
+  requestId = json_data["requestId"]
   return = {
-      'recordId': record['recordId'],
+      'recordId': requestId,
       'result': 'Ok',
       'data': msg_data
     }
