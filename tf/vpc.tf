@@ -54,6 +54,19 @@ resource "aws_internet_gateway" "twohundreadok-vpc-ig" {
   }
 }
 
+# resource "aws_nat_gateway" "twohundreadok-vpc-ng" {
+#   # allocation_id = aws_eip.iac-e-ip.id
+#   subnet_id     = aws_subnet.twohundreadok-private-subnet.id
+
+#   tags = {
+#     Name = "twohundreadok-vpc-ng"
+#   }
+
+#   # To ensure proper ordering, it is recommended to add an explicit dependency
+#   # on the Internet Gateway for the VPC.
+#   depends_on = [aws_internet_gateway.twohundreadok-vpc-ig]
+# }
+
 resource "aws_route_table" "twohundreadok-vpc-rt" {
   vpc_id = aws_vpc.twohundreadok-vpc.id
 
