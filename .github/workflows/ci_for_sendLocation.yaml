@@ -20,6 +20,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Copy Folder
+      continue-on-error: true
       run: |
         rm *
         cp -r lambda/sendLocation/* ./
