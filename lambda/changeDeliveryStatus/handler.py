@@ -11,14 +11,14 @@ def publishSNS(message):
         TopicArn=os.environ['SNS_TOPIC'],
         Message=message,
         MessageStructure='string'
-        )
+    )
     return response
     
 def changeStatus(status, id):
     URL = os.environ['OPENSEARCH_ENDPOINT'] # + ':9200'
     region = "ap-northeast-2"
     service = 'es'
-    credentials = boto3.Session().get_credentials('default')
+    credentials = boto3.Session().get_credentials()
     print(0)
     awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
     print(1)
