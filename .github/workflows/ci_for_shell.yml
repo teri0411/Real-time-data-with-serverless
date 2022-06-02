@@ -15,10 +15,14 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
+
       - name: Create env file
         run: |
           touch .env
-          echo "ENDPOINT_URL=$aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r" >> .env
+          echo ENDPOINT_URL= >> .env
+          echo WEBSOCKET= >> .env
+          echo WEBSOCKET_URL= >> .env
+          cat .env
           cat .env >> $GITHUB_ENV
 
       - name: Set the value
@@ -26,20 +30,21 @@ jobs:
         run: |
           echo 'ENDPOINT_URL<<EOF' >> $GITHUB_ENV
           aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r >> $GITHUB_ENV
+          echo 'WEBSOCKET<<EOF' >> $GITHUB_ENV
+          aws apigatewayv2 get-apis | jq .Items -r | jq -c '.[] | select(.Name | contains("websocket"))'.ApiEndpoint -r | sed -e "s/\$/\/dev/g" >> $GITHUB_ENV
+          echo 'WEBSOCKET_URL<<EOF' >> $GITHUB_ENV
+          aws apigatewayv2 get-apis | jq .Items -r | jq -c '.[] | select(.Name | contains("websocket"))'.ApiEndpoint -r | sed 's/\wss/https/g' | sed -e "s/\$/\/dev/g" >> $GITHUB_ENV
+
           echo 'EOF' >> $GITHUB_ENV
 
       - name: Use the value
         id: step_two
         run: |
-          echo "${{ env.ENDPOINT_URL }}" # This will output 'yellow'
+          echo "${{ env.ENDPOINT_URL }}" # This will output 'ENDPOINT_URL'
+          echo "${{ env.WEBSOCKET }}" # This will output 'WEBSOCKET'
+          echo "${{ env.WEBSOCKET_URL }}" # This will output 'WEBSOCKET_URL'
 
-      - uses: actions/checkout@v1
-      - name: script
-        run: |
-          chmod +x ./action.sh
-          source action.sh
 
-        shell: bash
 
 
 

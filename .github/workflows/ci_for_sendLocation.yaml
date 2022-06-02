@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - develop
-    paths: ['lambda/sendLocation/**']
+    paths: ['lambda/sendLocation/**', '.github/workflows/ci_for_sendLocation.yaml']
 
 jobs:
   deploy:
@@ -20,8 +20,9 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Copy Folder
+      continue-on-error: true
       run: |
-        rm .
+        rm *
         cp -r lambda/sendLocation/* ./
         rm -rf lambda
         rm -rf tf

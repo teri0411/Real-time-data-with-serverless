@@ -27,48 +27,40 @@ jobs:
           rm README.md
           rm .gitignore
 
-      - name: ACTIONS_ALLOW_UNSECURE_COMMANDS
-        run: echo 'ACTIONS_ALLOW_UNSECURE_COMMANDS=true' >> $GITHUB_ENV
-      
-      - name: env setting
-        uses: chrislennon/action-aws-cli@v1.1
-      # All commands after this point have access to the AWS CLI
-      - run: |
-      
+      - name: Configure AWS credentials from Test account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+     
+      - name: Create env file
+        run: |
+          touch .env
+          echo ENDPOINT_URL= >> .env
+          echo WEBSOCKET= >> .env
+          echo WEBSOCKET_URL= >> .env
+          cat .env
+          cat .env >> $GITHUB_ENV
+          
+      - name: Set the value
+        id: step_one
+        run: |
           echo 'ENDPOINT_URL<<EOF' >> $GITHUB_ENV
           aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-          
           echo 'WEBSOCKET<<EOF' >> $GITHUB_ENV
           aws apigatewayv2 get-apis | jq .Items -r | jq -c '.[] | select(.Name | contains("websocket"))'.ApiEndpoint -r | sed -e "s/\$/\/dev/g" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-          
           echo 'WEBSOCKET_URL<<EOF' >> $GITHUB_ENV
           aws apigatewayv2 get-apis | jq .Items -r | jq -c '.[] | select(.Name | contains("websocket"))'.ApiEndpoint -r | sed 's/\wss/https/g' | sed -e "s/\$/\/dev/g" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-          
+      
 
-
-          
-          
-          
-#           export ENDPOINT_URL=$(aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r)
-#           echo $ENDPOINT_URL >> $GITHUB_ENV
-#           export WEBSOCKET=$(aws apigatewayv2 get-apis | jq .Items -r | jq -c '.[] | select(.Name | contains("websocket"))'.ApiEndpoint -r | sed -e "s/\$/\/dev/g")
-#           echo $WEBSOCKET >> $GITHUB_ENV
-#           export WEBSOCKET_URL=$(aws apigatewayv2 get-apis | jq .Items -r | jq -c '.[] | select(.Name | contains("websocket"))'.ApiEndpoint -r | sed 's/\wss/https/g' | sed -e "s/\$/\/dev/g")
-#           echo $WEBSOCKET_URL >> $GITHUB_ENV
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
-          
       - name: Use the value
         id: step_two
         run: |
-          echo "${{ env.ENDPOINT_URL }}"
-          echo "${{ env.WEBSOCKET }}"
-          echo "${{ env.WEBSOCKET_URL }}"
+          echo "${{ env.ENDPOINT_URL }}" # This will output 'ENDPOINT_URL'
+          echo "${{ env.WEBSOCKET }}" # This will output 'WEBSOCKET'
+          echo "${{ env.WEBSOCKET_URL }}" # This will output 'WEBSOCKET_URL'
 
       - name:  
           serverless deploy
