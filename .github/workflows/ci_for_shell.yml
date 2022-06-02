@@ -19,7 +19,9 @@ jobs:
       - name: Set the value
         id: step_one
         run: |
-          echo "ENDPOINT_URL=$(aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r)" >> $GITHUB_ENV
+          echo 'ENDPOINT_URL<<EOF' >> $GITHUB_ENV
+          aws lambda get-function-url-config --function-name websocket-app-dev-publish | jq .FunctionUrl -r >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
 
       - name: Use the value
         id: step_two
