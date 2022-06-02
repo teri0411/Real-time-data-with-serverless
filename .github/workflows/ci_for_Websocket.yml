@@ -35,7 +35,6 @@ jobs:
           aws-region: ap-northeast-2
      
       - name: Create env file
-        uses: actions/checkout@v3
         run: |
           touch .env
           echo ENDPOINT_URL= >> .env

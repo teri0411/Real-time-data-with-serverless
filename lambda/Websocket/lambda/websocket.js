@@ -1,6 +1,6 @@
 import Client from '../helper/client';
 import Topic from '../helper/topic';
-//
+/////////////////
 export async function handler(event) {
     try {
         console.log(`Received socket connectionId: ${event.requestContext && event.requestContext.connectionId}`);
