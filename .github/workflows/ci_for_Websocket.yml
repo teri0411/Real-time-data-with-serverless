@@ -37,6 +37,9 @@ jobs:
       - name: Create env file
         run: |
           touch .env
+          echo aws-access-key-id=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env
+          echo aws-secret-access-key=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env
+          echo TOPICS_TABLE=connection >> .env
           echo ENDPOINT_URL= >> .env
           echo WEBSOCKET= >> .env
           echo WEBSOCKET_URL= >> .env
@@ -68,8 +71,8 @@ jobs:
         id: step_five
         run: |
           echo "${{ env.ENDPOINT_URL }}" # This will output 'ENDPOINT_URL'
-          # echo "${{ env.WEBSOCKET }}" # This will output 'WEBSOCKET'
-          # echo "${{ env.WEBSOCKET_URL }}" # This will output 'WEBSOCKET_URL'
+          echo "${{ env.WEBSOCKET }}" # This will output 'WEBSOCKET'
+          echo "${{ env.WEBSOCKET_URL }}" # This will output 'WEBSOCKET_URL'
 
       - name:  
           serverless deploy
