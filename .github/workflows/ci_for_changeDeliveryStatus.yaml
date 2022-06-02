@@ -24,6 +24,7 @@ jobs:
       run: |
         rm -rf tf
         rm *
+        rm .gitignore
     - name: 
         serverless deploy
       run: |
