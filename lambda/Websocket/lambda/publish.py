@@ -91,11 +91,11 @@ def lambda_handler(event, context):
   print(response)
 
   requestId = json_data["requestId"]
-  return = {
+  return {
       'recordId': requestId,
       'result': 'Ok',
       'data': msg_data
-    }
+        }
 
 
 
