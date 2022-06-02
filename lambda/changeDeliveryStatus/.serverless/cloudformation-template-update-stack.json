@@ -198,7 +198,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/ChangeDeliveryStatus/dev/1654151109589-2022-06-02T06:25:09.589Z/ChangeDeliveryStatus.zip"
+          "S3Key": "serverless/ChangeDeliveryStatus/dev/1654155786401-2022-06-02T07:43:06.401Z/ChangeDeliveryStatus.zip"
         },
         "Handler": "handler.start",
         "Runtime": "python3.7",
@@ -237,7 +237,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/ChangeDeliveryStatus/dev/1654151109589-2022-06-02T06:25:09.589Z/ChangeDeliveryStatus.zip"
+          "S3Key": "serverless/ChangeDeliveryStatus/dev/1654155786401-2022-06-02T07:43:06.401Z/ChangeDeliveryStatus.zip"
         },
         "Handler": "handler.end",
         "Runtime": "python3.7",
@@ -269,24 +269,24 @@
         "EndDeliveryLogGroup"
       ]
     },
-    "StartDeliveryLambdaVersionggp8HjUY25krsp6LKCEH9CzTs4PvyOR3XnnsHccmE": {
+    "StartDeliveryLambdaVersionShTXPDkPjQOJAz0EnIBlpQVvX4hRKTB2QYI6xb9omM": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "StartDeliveryLambdaFunction"
         },
-        "CodeSha256": "IpzkLlVoAHueAQj1UwpGt6hZ6C43T4w6R2p4bbX6SCM="
+        "CodeSha256": "i5ynHVImmab9s3UMp0tUtXi4Oq7vPsEphvi8FCapHuo="
       }
     },
-    "EndDeliveryLambdaVersion4IjngRdr5bKFy8PeYzEFs0QaEP5vUbLK6Vga7RquzrY": {
+    "EndDeliveryLambdaVersiond88Yt6TauOsctV2LKvucttdtAcSu9PkjAuWP0fb2Xw": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "EndDeliveryLambdaFunction"
         },
-        "CodeSha256": "IpzkLlVoAHueAQj1UwpGt6hZ6C43T4w6R2p4bbX6SCM="
+        "CodeSha256": "i5ynHVImmab9s3UMp0tUtXi4Oq7vPsEphvi8FCapHuo="
       }
     },
     "HttpApi": {
@@ -472,7 +472,7 @@
     "StartDeliveryLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "StartDeliveryLambdaVersionggp8HjUY25krsp6LKCEH9CzTs4PvyOR3XnnsHccmE"
+        "Ref": "StartDeliveryLambdaVersionShTXPDkPjQOJAz0EnIBlpQVvX4hRKTB2QYI6xb9omM"
       },
       "Export": {
         "Name": "sls-ChangeDeliveryStatus-dev-StartDeliveryLambdaFunctionQualifiedArn"
@@ -481,7 +481,7 @@
     "EndDeliveryLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "EndDeliveryLambdaVersion4IjngRdr5bKFy8PeYzEFs0QaEP5vUbLK6Vga7RquzrY"
+        "Ref": "EndDeliveryLambdaVersiond88Yt6TauOsctV2LKvucttdtAcSu9PkjAuWP0fb2Xw"
       },
       "Export": {
         "Name": "sls-ChangeDeliveryStatus-dev-EndDeliveryLambdaFunctionQualifiedArn"

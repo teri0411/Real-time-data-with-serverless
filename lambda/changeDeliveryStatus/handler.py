@@ -41,13 +41,13 @@ def changeStatus(status, id):
         response = search.index(index="status", doc_type="_doc", id=id, body=document)
         print(response)
         return response
-    print(3)
 
 def start(event, context):
     message = {"message": "start delivery"}
     id = event['body']
     id = json.loads(id)['id']
-    publishSNS(str(message)) #{"statusCode": 200, "body": message}
+    print(id)
+    # publishSNS(str(message)) #{"statusCode": 200, "body": message}
     print(event)
     response = changeStatus(0, id)
     return response
