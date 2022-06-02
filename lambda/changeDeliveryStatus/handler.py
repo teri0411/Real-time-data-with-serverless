@@ -2,7 +2,6 @@ import json
 import boto3
 from opensearchpy import OpenSearch, RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
-import requests
 import os
 
 def publishSNS(message):
@@ -12,6 +11,7 @@ def publishSNS(message):
         Message=message,
         MessageStructure='string'
     )
+    print(response)
     return response
     
 def changeStatus(status, id):
@@ -19,9 +19,7 @@ def changeStatus(status, id):
     region = "ap-northeast-2"
     service = 'es'
     credentials = boto3.Session().get_credentials()
-    print(0)
     awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
-    print(1)
     search = OpenSearch(
         hosts = [{'host': URL, 'port': 443}],
         http_auth = awsauth,
@@ -29,32 +27,27 @@ def changeStatus(status, id):
         verify_certs = True,
         connection_class = RequestsHttpConnection
     )
-    print(2)
     if status == 0:
         document = {"id": id, "status": "start"}
         response = search.index(index="status", id=id, body=document)
-        print(response)
         return response
     elif status == 1:
         document = {"id": id, "status": "end"}
         response = search.index(index="status", id=id, body=document)
-        print(response)
         return response
 
 def start(event, context):
     message = {"message": "start delivery"}
     id = event['body']
     id = json.loads(id)['id']
-    print(id)
-    publishSNS(str(message)) #{"statusCode": 200, "body": message}
-    print(event)
+    reponseSNS = publishSNS(str(message))
     response = changeStatus(0, id)
-    return response
+    return reponseSNS
 
 def end(event, context):
     message = {"message": "end delivery"}
     id = event['body']
     id = json.loads(id)['id']
-    response = publishSNS(str(message))
+    responseSNS = publishSNS(str(message))
     response = changeStatus(1, id)
-    return response
+    return responseSNS
