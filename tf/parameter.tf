@@ -35,7 +35,7 @@ resource "aws_ssm_parameter" "sns_NotificationSend" {
 resource "aws_ssm_parameter" "securityGroup_id" {
   name = "/200OK/Security_Group/ID"
   type = "String"
-  value = aws_security_group.es_sg.id
+  value = aws_security_group.lambda_sg.id
   overwrite = true
 }
 
