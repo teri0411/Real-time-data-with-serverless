@@ -15,6 +15,7 @@ def publishSNS(message):
     return response
     
 def changeStatus(event, context):
+    print(event)
     URL = os.environ['OPENSEARCH_ENDPOINT'] # + ':9200'
     region = "ap-northeast-2"
     service = 'es'

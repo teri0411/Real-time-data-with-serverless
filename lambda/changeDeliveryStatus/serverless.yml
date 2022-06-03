@@ -48,7 +48,6 @@ functions:
       subnetIds:
         - ${ssm:/200OK/subnet/ID}
     
-
 plugins:
   - serverless-python-requirements
 
