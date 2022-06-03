@@ -42,5 +42,4 @@ resources:
       Properties:
         Protocol: sqs
         Endpoint: !GetAtt sendNotification.Arn
-        # Region: !Ref TopicRegion
         TopicArn: ${ssm:/200OK/SNS/DeliveryStatus}

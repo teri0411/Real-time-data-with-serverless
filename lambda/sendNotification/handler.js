@@ -11,12 +11,11 @@ module.exports.hello = async (event) => {
   const body = event['Records'][0]['body']
   console.log(body)
   console.log("---위는 body----")
-  const bodyvalue = Object.values(body)
+  const bodyvalue = event['Records'][0]['body']['Message']
   console.log(bodyvalue)
 
-  const message = bodyvalue[3]
   let params = {
-    Message: message, /* required */
+    Message: bodyvalue, /* required */
     TopicArn: process.env.SNS_TOPIC
   };
 
