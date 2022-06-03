@@ -1,6 +1,12 @@
 service: sendNotification 
 
-provider:   
+provider:
+  - Effect: Allow
+    Action:
+      - sqs:DeleteMessage
+      - sqs:GetQueueAttributes
+      - sqs:ReceiveMessage   
+    Resource: arn:aws:sqs:ap-northeast-2:889058321615:sendNotification
   name: aws   
   runtime: nodejs14.x   
   region: ap-northeast-2 
