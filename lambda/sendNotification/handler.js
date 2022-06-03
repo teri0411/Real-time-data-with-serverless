@@ -26,13 +26,5 @@ module.exports.hello = async (event) => {
     if (err) console.log(err, err.stack); 
     else console.log(data);
   });
-  return response;
-  //hello anyone?
-  //hi
-  //hi?
-  //hello???
-  //??  
-  //? ?
-  //???
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
+  print(response)
 };
