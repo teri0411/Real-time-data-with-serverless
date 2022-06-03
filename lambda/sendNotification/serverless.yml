@@ -1,12 +1,7 @@
 service: sendNotification 
 
 provider:
-  - Effect: Allow
-    Action:
-      - sqs:DeleteMessage
-      - sqs:GetQueueAttributes
-      - sqs:ReceiveMessage   
-    Resource: arn:aws:sqs:ap-northeast-2:889058321615:sendNotification
+
   name: aws   
   runtime: nodejs14.x   
   region: ap-northeast-2 
@@ -18,6 +13,12 @@ provider:
           Action:
             - "sns:Publish"
           Resource: ${ssm:/200OK/SNS/NotificationSend}
+        - Effect: Allow
+          Action:
+            - sqs:DeleteMessage
+            - sqs:GetQueueAttributes
+            - sqs:ReceiveMessage   
+          Resource: arn:aws:sqs:ap-northeast-2:889058321615:sendNotification
   environment:
     SNS_TOPIC: ${ssm:/200OK/SNS/NotificationSend}
 
