@@ -7,9 +7,11 @@ module.exports.hello = async (event) => {
   console.log(event)
   console.log("-------event-------")
   console.log(event['Records'][0]['body'])
-  console.log("-------event['Records'][0]['body'-------")
+  console.log("-------event['Records'][0]['body']-------")
+  console.log(event['Records'][0]['body']["Message"])
+  const message = event['Records'][0]['body']["Message"]
   let params = {
-    Message: 'MESSG_TEXT', /* required */
+    Message: message, /* required */
     TopicArn: process.env.SNS_TOPIC
 
   };
@@ -17,7 +19,7 @@ module.exports.hello = async (event) => {
     if (err) console.log(err, err.stack); 
     else console.log(data);
   });
-  return Message
+  return message
   //hello anyone?
   //hi
   //hi?
