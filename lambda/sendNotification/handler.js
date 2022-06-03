@@ -14,13 +14,14 @@ module.exports.hello = async (event) => {
   console.log(body2)
   console.log("---위는 body----")
   let bodyvalue = JSON.stringify(body['Message']);
-  console.log(bodyvalue)
-  
 
   let params = {
+    TopicArn: process.env.SNS_TOPIC,
     Message: bodyvalue, /* required */
-    TopicArn: process.env.SNS_TOPIC
+    MessageStructure: 'string'
   };
+
+  console.log(bodyvalue)
 
   let response = sns.publish(params, function (err, data) {
     if (err) console.log(err, err.stack); 
