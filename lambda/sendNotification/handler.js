@@ -13,8 +13,9 @@ module.exports.hello = async (event) => {
   let body = JSON.parse(body2);
   console.log(body2)
   console.log("---위는 body----")
-  const bodyvalue = body['Message']
+  let bodyvalue = JSON.stringify(body['Message']);
   console.log(bodyvalue)
+  
 
   let params = {
     Message: bodyvalue, /* required */
