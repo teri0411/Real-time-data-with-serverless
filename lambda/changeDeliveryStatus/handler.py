@@ -2,7 +2,6 @@ import json
 import boto3
 from opensearchpy import OpenSearch, RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
-import requests
 import os
 
 def publishSNS(message):
@@ -12,16 +11,15 @@ def publishSNS(message):
         Message=message,
         MessageStructure='string'
     )
+    print(response)
     return response
     
-def changeStatus(status, id):
+def changeStatus(event, context):
     URL = os.environ['OPENSEARCH_ENDPOINT'] # + ':9200'
     region = "ap-northeast-2"
     service = 'es'
     credentials = boto3.Session().get_credentials()
-    print(0)
     awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
-    print(1)
     search = OpenSearch(
         hosts = [{'host': URL, 'port': 443}],
         http_auth = awsauth,
@@ -29,33 +27,29 @@ def changeStatus(status, id):
         verify_certs = True,
         connection_class = RequestsHttpConnection
     )
-    print(2)
+    status = 0
+    id = 1
     if status == 0:
         document = {"id": id, "status": "start"}
-        response = search.index(index="status", doc_type="_doc", id=id, body=document)
-        # response = requests.put()
-        print(response)
+        response = search.index(index="status", id=id, body=document)
         return response
     elif status == 1:
         document = {"id": id, "status": "end"}
-        response = search.index(index="status", doc_type="_doc", id=id, body=document)
-        print(response)
+        response = search.index(index="status", id=id, body=document)
         return response
 
 def start(event, context):
     message = {"message": "start delivery"}
     id = event['body']
     id = json.loads(id)['id']
-    print(id)
-    # publishSNS(str(message)) #{"statusCode": 200, "body": message}
-    print(event)
-    response = changeStatus(0, id)
-    return response
+    reponseSNS = publishSNS(str(message))
+    # response = changeStatus(0, id)
+    return reponseSNS
 
 def end(event, context):
     message = {"message": "end delivery"}
     id = event['body']
     id = json.loads(id)['id']
-    # response = publishSNS(str(message))
-    response = changeStatus(1, id)
-    return response
+    responseSNS = publishSNS(str(message))
+    # response = changeStatus(1, id)
+    return responseSNS

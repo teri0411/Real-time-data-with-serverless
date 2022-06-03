@@ -7,7 +7,7 @@ module.exports.hello = async (event) => {
   console.log(event['Records'][0]['body'])
   let params = {
     Message: 'MESSG_TEXT', /* required */
-    TopicArn: process.env
+    TopicArn: process.env.SNS_TOPIC
 
   };
   sns.publish(params, function (err, data) {

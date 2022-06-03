@@ -83,6 +83,12 @@
         "LogGroupName": "/aws/lambda/ChangeDeliveryStatus-dev-endDelivery"
       }
     },
+    "ChangeStatusLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/ChangeDeliveryStatus-dev-changeStatus"
+      }
+    },
     "IamRoleLambdaExecution": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -156,6 +162,22 @@
                     "arn:aws:es:ap-northeast-2:889058321615:domain/delivery",
                     "arn:aws:es:ap-northeast-2:889058321615:domain/delivery/*"
                   ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "sqs:ReceiveMessage",
+                    "sqs:DeleteMessage",
+                    "sqs:GetQueueAttributes"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "changeStatus",
+                        "Arn"
+                      ]
+                    }
+                  ]
                 }
               ]
             }
@@ -198,7 +220,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/ChangeDeliveryStatus/dev/1654155786401-2022-06-02T07:43:06.401Z/ChangeDeliveryStatus.zip"
+          "S3Key": "serverless/ChangeDeliveryStatus/dev/1654161309696-2022-06-02T09:15:09.696Z/ChangeDeliveryStatus.zip"
         },
         "Handler": "handler.start",
         "Runtime": "python3.7",
@@ -216,14 +238,6 @@
             "IamRoleLambdaExecution",
             "Arn"
           ]
-        },
-        "VpcConfig": {
-          "SecurityGroupIds": [
-            "sg-0efd0305b11c2c102"
-          ],
-          "SubnetIds": [
-            "subnet-0279ce18e30904d29"
-          ]
         }
       },
       "DependsOn": [
@@ -237,11 +251,42 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/ChangeDeliveryStatus/dev/1654155786401-2022-06-02T07:43:06.401Z/ChangeDeliveryStatus.zip"
+          "S3Key": "serverless/ChangeDeliveryStatus/dev/1654161309696-2022-06-02T09:15:09.696Z/ChangeDeliveryStatus.zip"
         },
         "Handler": "handler.end",
         "Runtime": "python3.7",
         "FunctionName": "ChangeDeliveryStatus-dev-endDelivery",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "SNS_TOPIC": "arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatusChange",
+            "OPENSEARCH_ENDPOINT": "vpc-delivery-lf3bfa3tavqdv2mdyr6ufnabkq.ap-northeast-2.es.amazonaws.com"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "EndDeliveryLogGroup"
+      ]
+    },
+    "ChangeStatusLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/ChangeDeliveryStatus/dev/1654161309696-2022-06-02T09:15:09.696Z/ChangeDeliveryStatus.zip"
+        },
+        "Handler": "handler.changeStatus",
+        "Runtime": "python3.7",
+        "FunctionName": "ChangeDeliveryStatus-dev-changeStatus",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
@@ -266,27 +311,59 @@
         }
       },
       "DependsOn": [
-        "EndDeliveryLogGroup"
+        "ChangeStatusLogGroup"
       ]
     },
-    "StartDeliveryLambdaVersionShTXPDkPjQOJAz0EnIBlpQVvX4hRKTB2QYI6xb9omM": {
+    "StartDeliveryLambdaVersionpybkPrvZ7ly71SgK4BU5zsJzOf4iJf0hdWEYnqpxYA": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "StartDeliveryLambdaFunction"
         },
-        "CodeSha256": "i5ynHVImmab9s3UMp0tUtXi4Oq7vPsEphvi8FCapHuo="
+        "CodeSha256": "Zmim7S95WqdEVq8ORSC6+lj5VIQrsQ2O405XYjewiPY="
       }
     },
-    "EndDeliveryLambdaVersiond88Yt6TauOsctV2LKvucttdtAcSu9PkjAuWP0fb2Xw": {
+    "EndDeliveryLambdaVersion0fmP2Op5mGEq6wJKHahIqfEeizkUmm0DpPADrdNg": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "EndDeliveryLambdaFunction"
         },
-        "CodeSha256": "i5ynHVImmab9s3UMp0tUtXi4Oq7vPsEphvi8FCapHuo="
+        "CodeSha256": "Zmim7S95WqdEVq8ORSC6+lj5VIQrsQ2O405XYjewiPY="
+      }
+    },
+    "ChangeStatusLambdaVersionSQk7hsTFehgrqlUbPH7GQIsxIRh7ztuD9SUPBuXLpWA": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ChangeStatusLambdaFunction"
+        },
+        "CodeSha256": "Zmim7S95WqdEVq8ORSC6+lj5VIQrsQ2O405XYjewiPY="
+      }
+    },
+    "ChangeStatusEventSourceMappingSQSChangeStatus": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "DependsOn": [
+        "IamRoleLambdaExecution"
+      ],
+      "Properties": {
+        "BatchSize": 10,
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "changeStatus",
+            "Arn"
+          ]
+        },
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ChangeStatusLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Enabled": true
       }
     },
     "HttpApi": {
@@ -458,6 +535,25 @@
         }
       },
       "DependsOn": "HttpApiIntegrationEndDelivery"
+    },
+    "changeStatus": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "QueueName": "changeStatus"
+      }
+    },
+    "SnsSubscription": {
+      "Type": "AWS::SNS::Subscription",
+      "Properties": {
+        "Protocol": "sqs",
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "changeStatus",
+            "Arn"
+          ]
+        },
+        "TopicArn": "arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatusChange"
+      }
     }
   },
   "Outputs": {
@@ -472,7 +568,7 @@
     "StartDeliveryLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "StartDeliveryLambdaVersionShTXPDkPjQOJAz0EnIBlpQVvX4hRKTB2QYI6xb9omM"
+        "Ref": "StartDeliveryLambdaVersionpybkPrvZ7ly71SgK4BU5zsJzOf4iJf0hdWEYnqpxYA"
       },
       "Export": {
         "Name": "sls-ChangeDeliveryStatus-dev-StartDeliveryLambdaFunctionQualifiedArn"
@@ -481,10 +577,19 @@
     "EndDeliveryLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "EndDeliveryLambdaVersiond88Yt6TauOsctV2LKvucttdtAcSu9PkjAuWP0fb2Xw"
+        "Ref": "EndDeliveryLambdaVersion0fmP2Op5mGEq6wJKHahIqfEeizkUmm0DpPADrdNg"
       },
       "Export": {
         "Name": "sls-ChangeDeliveryStatus-dev-EndDeliveryLambdaFunctionQualifiedArn"
+      }
+    },
+    "ChangeStatusLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ChangeStatusLambdaVersionSQk7hsTFehgrqlUbPH7GQIsxIRh7ztuD9SUPBuXLpWA"
+      },
+      "Export": {
+        "Name": "sls-ChangeDeliveryStatus-dev-ChangeStatusLambdaFunctionQualifiedArn"
       }
     },
     "HttpApiId": {

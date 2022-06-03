@@ -5,11 +5,7 @@ provider:
   name: aws
   runtime: python3.7
   region: ap-northeast-2
-  vpc:
-    securityGroupIds:
-      - ${ssm:/200OK/Security_Group/ID}
-    subnetIds:
-      - ${ssm:/200OK/subnet/ID}
+  
   iam:
     role:
       statements:
@@ -38,6 +34,20 @@ functions:
       - httpApi:
           path: /end
           method: post
+  changeStatus:
+    handler: handler.changeStatus
+    events:
+      - sqs:           
+         arn:             
+          Fn::GetAtt:               
+             - changeStatus               
+             - Arn  
+    vpc:
+      securityGroupIds:
+        - ${ssm:/200OK/Security_Group/ID}
+      subnetIds:
+        - ${ssm:/200OK/subnet/ID}
+    
 
 plugins:
   - serverless-python-requirements
@@ -45,4 +55,16 @@ plugins:
 custom:
   pythonRequirements:
     dockerizePip: true
-    fileName: requirements.txt
+
+resources:   
+  Resources:     
+    changeStatus:       
+      Type: "AWS::SQS::Queue"       
+      Properties:         
+        QueueName: "changeStatus"
+    SnsSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Protocol: sqs
+        Endpoint: !GetAtt changeStatus.Arn
+        TopicArn: ${ssm:/200OK/SNS/DeliveryStatus}

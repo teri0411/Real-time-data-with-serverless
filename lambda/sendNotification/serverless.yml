@@ -11,9 +11,9 @@ provider:
         - Effect: "Allow"
           Action:
             - "sns:Publish"
-          Resource:  ${ssm:/200OK/SNS/NotificationSend}
+          Resource: ${ssm:/200OK/SNS/NotificationSend}
   environment:
-    SNS_TOPIC:  ${ssm:/200OK/SNS/NotificationSend}
+    SNS_TOPIC: ${ssm:/200OK/SNS/NotificationSend}
 
 functions:   
   hello:     
@@ -36,4 +36,4 @@ resources:
         Protocol: sqs
         Endpoint: !GetAtt sendNotification.Arn
         # Region: !Ref TopicRegion
-        TopicArn: arn:aws:sns:ap-northeast-2:889058321615:DeliveryStatusChange
+        TopicArn: ${ssm:/200OK/SNS/DeliveryStatus}
