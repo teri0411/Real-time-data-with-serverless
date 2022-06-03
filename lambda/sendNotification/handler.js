@@ -8,8 +8,8 @@ module.exports.hello = async (event) => {
   console.log("-------event-------")
   console.log(event['Records'][0]['body'])
   console.log("-------event['Records'][0]['body']-------")
-  console.log(event['Records'][0]['body']["Message"])
-  const message = event['Records'][0]['body']["Message"]
+  console.log(event['Records'][0]['body'].Object.values("Message"))
+  const message = event['Records'][0]['body'].Object.values("Message")
   let params = {
     Message: message, /* required */
     TopicArn: process.env.SNS_TOPIC
