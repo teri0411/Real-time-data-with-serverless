@@ -13,13 +13,13 @@ module.exports.hello = async (event) => {
   let params = {
     Message: message, /* required */
     TopicArn: process.env.SNS_TOPIC
-
   };
-  sns.publish(params, function (err, data) {
+
+  let response = sns.publish(params, function (err, data) {
     if (err) console.log(err, err.stack); 
     else console.log(data);
   });
-  return message
+  return response;
   //hello anyone?
   //hi
   //hi?
