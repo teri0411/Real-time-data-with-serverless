@@ -220,7 +220,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/ChangeDeliveryStatus/dev/1654161309696-2022-06-02T09:15:09.696Z/ChangeDeliveryStatus.zip"
+          "S3Key": "serverless/ChangeDeliveryStatus/dev/1654163338024-2022-06-02T09:48:58.024Z/ChangeDeliveryStatus.zip"
         },
         "Handler": "handler.start",
         "Runtime": "python3.7",
@@ -251,7 +251,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/ChangeDeliveryStatus/dev/1654161309696-2022-06-02T09:15:09.696Z/ChangeDeliveryStatus.zip"
+          "S3Key": "serverless/ChangeDeliveryStatus/dev/1654163338024-2022-06-02T09:48:58.024Z/ChangeDeliveryStatus.zip"
         },
         "Handler": "handler.end",
         "Runtime": "python3.7",
@@ -282,7 +282,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/ChangeDeliveryStatus/dev/1654161309696-2022-06-02T09:15:09.696Z/ChangeDeliveryStatus.zip"
+          "S3Key": "serverless/ChangeDeliveryStatus/dev/1654163338024-2022-06-02T09:48:58.024Z/ChangeDeliveryStatus.zip"
         },
         "Handler": "handler.changeStatus",
         "Runtime": "python3.7",
@@ -314,34 +314,34 @@
         "ChangeStatusLogGroup"
       ]
     },
-    "StartDeliveryLambdaVersionpybkPrvZ7ly71SgK4BU5zsJzOf4iJf0hdWEYnqpxYA": {
+    "StartDeliveryLambdaVersionEiGjNuQ1K3NydqoeONQrs243IBy1Mqdy5CYhOKRVID4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "StartDeliveryLambdaFunction"
         },
-        "CodeSha256": "Zmim7S95WqdEVq8ORSC6+lj5VIQrsQ2O405XYjewiPY="
+        "CodeSha256": "cJF/HusJ2cvjnwO00GUVxzQXMgyqE8MI05HeDZ6lnyk="
       }
     },
-    "EndDeliveryLambdaVersion0fmP2Op5mGEq6wJKHahIqfEeizkUmm0DpPADrdNg": {
+    "EndDeliveryLambdaVersion4C4DwhkkPstpOKu7VetdwgwuREdporZBHQnIa3GBaQ": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "EndDeliveryLambdaFunction"
         },
-        "CodeSha256": "Zmim7S95WqdEVq8ORSC6+lj5VIQrsQ2O405XYjewiPY="
+        "CodeSha256": "cJF/HusJ2cvjnwO00GUVxzQXMgyqE8MI05HeDZ6lnyk="
       }
     },
-    "ChangeStatusLambdaVersionSQk7hsTFehgrqlUbPH7GQIsxIRh7ztuD9SUPBuXLpWA": {
+    "ChangeStatusLambdaVersionJxnvEML46Onu8BXBhtW9yTM2vI3kA4sGQK055U7aCVg": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ChangeStatusLambdaFunction"
         },
-        "CodeSha256": "Zmim7S95WqdEVq8ORSC6+lj5VIQrsQ2O405XYjewiPY="
+        "CodeSha256": "cJF/HusJ2cvjnwO00GUVxzQXMgyqE8MI05HeDZ6lnyk="
       }
     },
     "ChangeStatusEventSourceMappingSQSChangeStatus": {
@@ -568,7 +568,7 @@
     "StartDeliveryLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "StartDeliveryLambdaVersionpybkPrvZ7ly71SgK4BU5zsJzOf4iJf0hdWEYnqpxYA"
+        "Ref": "StartDeliveryLambdaVersionEiGjNuQ1K3NydqoeONQrs243IBy1Mqdy5CYhOKRVID4"
       },
       "Export": {
         "Name": "sls-ChangeDeliveryStatus-dev-StartDeliveryLambdaFunctionQualifiedArn"
@@ -577,7 +577,7 @@
     "EndDeliveryLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "EndDeliveryLambdaVersion0fmP2Op5mGEq6wJKHahIqfEeizkUmm0DpPADrdNg"
+        "Ref": "EndDeliveryLambdaVersion4C4DwhkkPstpOKu7VetdwgwuREdporZBHQnIa3GBaQ"
       },
       "Export": {
         "Name": "sls-ChangeDeliveryStatus-dev-EndDeliveryLambdaFunctionQualifiedArn"
@@ -586,7 +586,7 @@
     "ChangeStatusLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ChangeStatusLambdaVersionSQk7hsTFehgrqlUbPH7GQIsxIRh7ztuD9SUPBuXLpWA"
+        "Ref": "ChangeStatusLambdaVersionJxnvEML46Onu8BXBhtW9yTM2vI3kA4sGQK055U7aCVg"
       },
       "Export": {
         "Name": "sls-ChangeDeliveryStatus-dev-ChangeStatusLambdaFunctionQualifiedArn"
