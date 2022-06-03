@@ -8,9 +8,10 @@ module.exports.hello = async (event) => {
   console.log("-------event-------")
   console.log(event['Records'][0]['body'])
   console.log("-------event['Records'][0]['body']-------")
-  body = event['Records'][0]['body']
+  const body = event['Records'][0]['body']
   console.log(body)
-  bodyvalue = Object.values(body)
+  console.log("---위는 body----")
+  const bodyvalue = Object.values(body)
   console.log(bodyvalue)
 
   const message = bodyvalue[3]
