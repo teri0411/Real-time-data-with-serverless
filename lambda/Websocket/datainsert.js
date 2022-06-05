@@ -29,7 +29,7 @@ export default function () {
   const payload = {"input":1};
   const getRandom = Math.random() * (100 - 1) + 1;
   
-  const driverData =  {"truckerId": "588866", "@timestamp_utc": nowDate, "location": {"lat": getRandom ,"lon": getRandom}};
+  const driverData =  {"truckerId": "588866", "@timestamp_utc": "2022-05-17T08:02:55.567Z", "location": {"lat": 37.3044668 ,"lon": 127.0422522}};
   const headers = {
     'Content-Type': 'application/json',
     'dataType': 'json'
