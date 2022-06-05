@@ -40,7 +40,7 @@ export default function () {
   });
   console.log(JSON.stringify(driverData))
   sleep(0.1);
-
+///
   const checkRes = check(res, {
     'status is 200': (r) => r.status === 200, // 기대한 HTTP 응답코드인지 확인합니다. 
     'response body': (r) => r.body.indexOf('{"message":"Message accepted!"}') !== -1,  // 기대한 응답인지 확인합니다. 
