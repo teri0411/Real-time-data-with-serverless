@@ -16,8 +16,9 @@
 ![image](https://user-images.githubusercontent.com/75375944/172033154-d9e46dea-5372-49b6-8611-ecb0a76f6630.png)
 
 Create a new directory, navigate to that directory in a terminal and clone the GitHub repository:
-
+```
 $git clone https://github.com/teri0411/Real-time-data-with-serverless.git
+```
 
 
 ## Deployment Instructions
