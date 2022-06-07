@@ -17,9 +17,12 @@
 
 Create a new directory, navigate to that directory in a terminal and clone the GitHub repository:
 
-git clone https://github.com/teri0411/Real-time-data-with-serverless.git
-Change directory to the pattern directory:
+$git clone https://github.com/teri0411/Real-time-data-with-serverless.git
+
+and
+
 
 $source action.sh
+
 From the command line, use Shell Script
 
