@@ -12,7 +12,7 @@
 * 예상 경로는 제공하지 않는다.
 * 예약 정보 리스트 조회화면에서는 실시간 위치를 반영하지 않는다.
 
-## 아키텍처
+## Architecture
 ![image](https://user-images.githubusercontent.com/75375944/172033154-d9e46dea-5372-49b6-8611-ecb0a76f6630.png)
 
 Create a new directory, navigate to that directory in a terminal and clone the GitHub repository:
