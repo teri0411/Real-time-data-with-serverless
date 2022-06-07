@@ -19,10 +19,15 @@ Create a new directory, navigate to that directory in a terminal and clone the G
 
 $git clone https://github.com/teri0411/Real-time-data-with-serverless.git
 
-and
 
+During the prompts:
 
+- Enter the AWS configure list
+- Enter the desired AWS Region
+- Create your .env file
+- Input the AWS configure list into env file.
+
+```
 $source action.sh
-
+```
 From the command line, use Shell Script
-
