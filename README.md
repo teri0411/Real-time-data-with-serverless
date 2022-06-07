@@ -34,18 +34,21 @@ $source action.sh
 From the command line, Use Shell Script
 
 ## Testing
-1. Change directory to the pattern directory:
+1.Change directory to the pattern directory:
 ```
 cd Real-time-data-with-serverless/lambda/Websocket/
-``
-2. Send your data using k6 :
+```
+
+2.Send your data using k6 :
 ```
 $k6 run datainsert.js
-``
-3 Open your Websocket API :
+```
+
+3  Open your Websocket API :
 ```
 $node ws-client
-``
+```
+
 4. You will see your data being received in the ws-client.
 
 ## Clean up
@@ -53,6 +56,7 @@ $node ws-client
 ```
 $serverless remove
 ```
+
 2. Change directory to the pattern directory:
 ```
 $terraform destroy
