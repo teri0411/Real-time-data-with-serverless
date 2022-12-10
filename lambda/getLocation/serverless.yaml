@@ -3,7 +3,7 @@ frameworkVersion: '3'
 
 provider:
   name: aws
-  runtime: nodejs14.x # FILL_ME_IN
+  runtime: nodejs14.x 
   region: ap-northeast-2 
 
   	
@@ -13,4 +13,3 @@ functions:
 
 plugins:
   - serverless-lift
-

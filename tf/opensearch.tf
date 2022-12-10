@@ -17,17 +17,17 @@ resource "aws_opensearch_domain" "delivery_cluster" {
     subnet_ids         = [aws_subnet.twohundreadok-private-subnet.id]
   }
 
- # access_policies = <<CONFIG
+  #access_policies = <<CONFIG
 #{
-#    "Version": "2012-10-17",
-#    "Statement": [
-#        {
-#            "Action": "es:*",
-#            "Principal": "*",
-#            "Effect": "Allow",
-#            "Resource": "${aws_iam_role_policy.firehose-lambda.arn}"
-#        }
-#    ]
+    #"Version": "2012-10-17",
+    #"Statement": [
+        #{
+            #"Action": "es:*",
+            #"Principal": "*",
+            #"Effect": "Allow",
+            #"Resource": "arn:aws:es:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:domain/${var.domain}/*"
+        #}
+    #]
 #}
 #CONFIG
 

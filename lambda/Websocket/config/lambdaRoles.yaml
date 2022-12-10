@@ -75,7 +75,7 @@ PublishToConnectionsPolicy:
             - "execute-api:ManageConnections"
           Resource: !Join
             - ""
-            - - "arn:aws:execute-api:ap-south-1:"
+            - - "arn:aws:execute-api:ap-northeast-2:"
               - !Ref "AWS::AccountId"
               - ":"
               - !Ref WebsocketsApi

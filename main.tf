@@ -18,10 +18,10 @@
 
     terraform {
       cloud {
-        organization = "example-org-eca7ff"
+        organization = "rupingroup"
 
         workspaces {
-          name = "final-project-teamC"
+          name = "rupincli"
         }
       }
     }

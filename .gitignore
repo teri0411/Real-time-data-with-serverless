@@ -39,3 +39,4 @@ override.tf.json
 terraform.rc
 .env
 # End of https://www.toptal.com/developers/gitignore/api/terraform
+node_modules

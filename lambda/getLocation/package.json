@@ -15,5 +15,8 @@
     "elasticsearch-nodejs-watcher": "^1.0.5",
     "index": "^0.4.0",
     "ws": "^8.6.0"
+  },
+  "devDependencies": {
+    "serverless-python-requirements": "^6.0.0"
   }
 }

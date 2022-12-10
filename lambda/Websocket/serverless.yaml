@@ -38,7 +38,7 @@ provider:
   environment:
   role: LambdaRole
   iam:
-    role: 'arn:aws:iam::889058321615:role/websocket'
+    role: 'arn:aws:iam::967699999360:role/WebsocketRole' ##있는거넣어
   versionFunctions: false
   deploymentBucket:
     blockPublicAccess: true

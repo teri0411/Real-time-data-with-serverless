@@ -1,4 +1,4 @@
-                                                                                      import http from 'k6/http';
+import http from 'k6/http';
 import { sleep, check } from 'k6';
 import { Counter } from 'k6/metrics';
 
@@ -15,10 +15,8 @@ export const options = {
     { target: 20, duration: '20s' },
     { target: 15, duration: '20s' },
     { target: 0, duration: '20s' },
-  ],
-  thresholds: {
-    requests: ['count < 100'],
-  },
+  ]
+
 };
 
 
@@ -34,7 +32,7 @@ export default function () {
     'Content-Type': 'application/json',
     'dataType': 'json'
   };
-  const res = http.request('POST', 'https://rrbmyhdt4g.execute-api.ap-northeast-2.amazonaws.com/location', // 주소 바꾸세요
+  const res = http.request('POST', 'https://c864si4m4i.execute-api.ap-northeast-2.amazonaws.com/', // 주소 바꾸세요
   JSON.stringify(driverData),  {
     headers: headers,
   });

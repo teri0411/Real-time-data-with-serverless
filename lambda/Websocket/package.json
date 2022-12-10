@@ -24,7 +24,7 @@
     "serverless": "^3.18.2",
     "serverless-dotenv-plugin": "2.1.1",
     "serverless-dynamodb-local": "^0.2.40",
-    "serverless-offline": "v6.0.0-alpha.67",
+    "serverless-offline": "^6.0.0-alpha.67",
     "serverless-plugin-existing-s3": "2.4.0",
     "serverless-webpack": "^5.3.2",
     "webpack": "latest"

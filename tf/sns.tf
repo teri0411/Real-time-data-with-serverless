@@ -9,5 +9,5 @@ resource "aws_sns_topic" "NotificationSend" {
 resource "aws_sns_topic_subscription" "sendNoti_toUser" {
   topic_arn = aws_sns_topic.NotificationSend.arn
   protocol  = "email"
-  endpoint  = "jsh7323@naver.com"
+  endpoint  = "goaheadman@naver.com"
 }

@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 
-const sockedEndpoint = 'wss://dsvx5qnze1.execute-api.ap-northeast-2.amazonaws.com/dev';
+const sockedEndpoint = 'wss://de8m12vi76.execute-api.ap-northeast-2.amazonaws.com/dev';
 const ws1 = new WebSocket(sockedEndpoint, {
   perMessageDeflate: false
 });

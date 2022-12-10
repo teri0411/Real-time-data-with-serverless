@@ -43,3 +43,5 @@ resources:
         Protocol: sqs
         Endpoint: !GetAtt sendNotification.Arn
         TopicArn: ${ssm:/200OK/SNS/DeliveryStatus}
+# plugins:
+#   - serverless-python-requirements
